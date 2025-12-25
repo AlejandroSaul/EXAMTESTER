@@ -1,4 +1,4 @@
-package constantes;
+package com.examtester.constantes;
 
 public class ConstantesTester {
 	public static final String CONST_ID_PREGUNTA = "ID_PREGUNTA";

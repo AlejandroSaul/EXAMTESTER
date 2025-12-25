@@ -1,23 +1,22 @@
-package business;
+package com.examtester.business;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import dao.ExamenDAO;
-import dao.ExamenDAOImpl;
-import entidad.Pregunta;
+import org.springframework.stereotype.Service;
 
+import com.examtester.dao.ExamenDAO;
+import com.examtester.entidad.Pregunta;
+
+@Service
 public class BiImpl implements Bi{
+    private final ExamenDAO examenDAO;
+    
+    public BiImpl(ExamenDAO examenDAO) {
+        this.examenDAO = examenDAO;
+    }
 
-	ExamenDAO examenDAO = new ExamenDAOImpl();
-	
-	@Override
-	public Pregunta getPregunta(Integer id) {
-		Pregunta pregunta = examenDAO.buscarPreguntaById(id);
-		return pregunta;
-	}
-	
 	@Override
 	public String getQuestinamiento(Pregunta pregunta) {		
 		return pregunta.getPregunta();
@@ -53,5 +52,13 @@ public class BiImpl implements Bi{
 		Map<Integer,String> temas = examenDAO.getTemas();
 		return temas;
 	}
+
+	@Override
+	public List<Pregunta> getAllPreguntas() {
+		List<Pregunta> preguntas = examenDAO.getAllPreguntas(); 
+		return preguntas;
+	}
+	
+	
 
 }

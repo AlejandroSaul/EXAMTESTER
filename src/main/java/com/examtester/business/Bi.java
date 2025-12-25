@@ -1,12 +1,11 @@
-package application;
+package com.examtester.business;
 
 import java.util.List;
 import java.util.Map;
 
-import entidad.Pregunta;
+import com.examtester.entidad.Pregunta;
 
-public interface App {
-	public Pregunta getPregunta(Integer id);
+public interface Bi {
 	
 	public String getQuestinamiento(Pregunta pregunta);
 	
@@ -14,15 +13,12 @@ public interface App {
 	
 	public String getRespuesta(Pregunta pregunta);
 	
-	public Integer getNumeroRegistros();
-	
 	public Integer getId(Pregunta pregunta);
 	
 	public String getExplicacion(Pregunta pregunta);
 	
 	public Map<Integer,String> getTemas();
 	
-	public Map<Integer,String> getSubtemas();
+	public List<Pregunta> getAllPreguntas();
 	
-	public List<Integer> getPreguntasSubtemaActivo();
 }

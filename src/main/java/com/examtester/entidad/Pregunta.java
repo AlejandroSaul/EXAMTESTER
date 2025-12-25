@@ -1,4 +1,4 @@
-package entidad;
+package com.examtester.entidad;
 
 import java.util.Objects;
 
