@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.examtester.dao.ExamenDAO;
 import com.examtester.entidad.Pregunta;
+import com.examtester.entidad.PreguntaInfoVo;
 
 @Service
 public class BiImpl implements Bi{
@@ -54,11 +55,15 @@ public class BiImpl implements Bi{
 	}
 
 	@Override
-	public List<Pregunta> getAllPreguntas() {
-		List<Pregunta> preguntas = examenDAO.getAllPreguntas(); 
+	public List<PreguntaInfoVo> getAllPreguntas() {
+		List<PreguntaInfoVo> preguntas = examenDAO.getAllPreguntas(); 
 		return preguntas;
 	}
 	
-	
+	@Override
+	public PreguntaInfoVo getPregunta(Long id) {
+		PreguntaInfoVo pregunta = examenDAO.getPregunta(id); 
+		return pregunta;
+	}
 
 }

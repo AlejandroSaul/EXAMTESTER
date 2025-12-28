@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.examtester.constantes.ConstantesTester;
 import com.examtester.constantes.QuerysTester;
-import com.examtester.entidad.Pregunta;
+import com.examtester.entidad.PreguntaInfoVo;
 
 @Repository
 public class ExamenDAOImpl implements ExamenDAO {
@@ -26,32 +26,36 @@ public class ExamenDAOImpl implements ExamenDAO {
     }
 
 	@Override
-	public List<Pregunta> getAllPreguntas() {
+	public List<PreguntaInfoVo> getAllPreguntas() {
 		String sql = QuerysTester.QUERY_GET_ALL_PREGUNTAS;
-		Pregunta pregunta = new Pregunta();
+		PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Connection con = null;
-		List<Pregunta> preguntas = new ArrayList();
+		List<PreguntaInfoVo> preguntasInfoVo = new ArrayList();
 		try {
 			con = dataSource.getConnection();
 			ps = con.prepareStatement(sql);
 			if(ps != null) {
 				rs = ps.executeQuery();
 				while(rs.next()) {
-					pregunta.setIdPregunta(rs.getInt(ConstantesTester.CONST_ID_PREGUNTA));
-					pregunta.setIdSubtemaTopico(rs.getInt(ConstantesTester.CONST_ID_SUBTEMA_TOPICO));
-					pregunta.setIdOrigen(rs.getInt(ConstantesTester.CONST_ID_ORIGEN));
-					pregunta.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
-					pregunta.setImagen(rs.getString(ConstantesTester.CONST_IMAGEN));
-					pregunta.setRutaArchivo(rs.getString(ConstantesTester.CONST_RUTA_ARCHIVO));
-					pregunta.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));
-					pregunta.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
-					pregunta.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
-					pregunta.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
-					pregunta.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
-					pregunta.setExplicacion(rs.getString(ConstantesTester.CONST_EXPLICACION));
-					preguntas.add(pregunta);
+					preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
+					preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
+					preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));					
+					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));					
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));					
+					preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_B));					
+					preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_C));					
+					preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_D));					
+					preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
+					preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
+					preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
+					preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
+					preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
+					preguntasInfoVo.add(preguntaInfoVo);
 				}
 			}
 		} catch (Exception e) {
@@ -65,7 +69,7 @@ public class ExamenDAOImpl implements ExamenDAO {
 				System.out.println("Error al cerrar las conexiones"+e);
 			}
 		}
-		return preguntas;
+		return preguntasInfoVo;
 	}
 
 	@Override
@@ -90,6 +94,46 @@ public class ExamenDAOImpl implements ExamenDAO {
 			System.out.println("Error al consultar los temas: "+e);
 		}
 		return resultado;
+	}
+	
+	@Override
+	public PreguntaInfoVo getPregunta(Long id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_GET_PREGUNTA;
+		PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setLong(1, id);
+			rs = ps.executeQuery();	
+			if(ps != null) {
+				while(rs.next()) {									
+					preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
+					preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
+					preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));					
+					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));					
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));					
+					preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_B));					
+					preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_C));					
+					preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_D));					
+					preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
+					preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
+					preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
+					preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
+					preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
+					preguntaInfoVo.setExplicacion(rs.getString(ConstantesTester.CONST_EXPLICACION));
+					preguntaInfoVo.setImagenExplicacion(rs.getString(ConstantesTester.CONST_IMAGEN_EXPLICACION));
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Error al consultar los temas: "+e);
+		}
+		return preguntaInfoVo;
 	}
 
 

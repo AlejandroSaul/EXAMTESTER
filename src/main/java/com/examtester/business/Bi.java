@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.examtester.entidad.Pregunta;
+import com.examtester.entidad.PreguntaInfoVo;
 
 public interface Bi {
 	
@@ -19,6 +20,8 @@ public interface Bi {
 	
 	public Map<Integer,String> getTemas();
 	
-	public List<Pregunta> getAllPreguntas();
+	public List<PreguntaInfoVo> getAllPreguntas();
+	
+	public PreguntaInfoVo getPregunta(Long id);
 	
 }
