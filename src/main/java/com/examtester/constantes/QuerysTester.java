@@ -6,6 +6,8 @@ public class QuerysTester {
 	public static final String QUERY_GET_TEMAS = "SELECT * FROM TEMA";
 	public static final String QUERY_GET_SUBTEMAS = "SELECT * FROM SUBTEMA";
 	public static final String QUERY_GET_TOPICO = "SELECT * FROM TOPICO";
+	public static final String QUERY_GET_SUBTEMAS_ID = "SELECT * FROM SUBTEMA WHERE ID_TEMA = ?";
+	
 	public static final String QUERY_GET_ALL_PREGUNTAS = "SELECT "
 		    + "P.ID_PREGUNTA, "
 		    + "P.PREGUNTA, "

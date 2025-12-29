@@ -10,9 +10,10 @@ public interface ExamenDAO {
 	Pregunta pregunta = new Pregunta();
 	
 	public List <PreguntaInfoVo> getAllPreguntas();
+
+	public PreguntaInfoVo getPregunta(Long id);
 	
 	public Map<Integer, String> getTemas();
 	
-	public PreguntaInfoVo getPregunta(Long id);
-	
+	public Map<Integer, String> getSubtemas(Long idTema);
 }

@@ -47,12 +47,6 @@ public class BiImpl implements Bi{
 	public String getExplicacion(Pregunta pregunta) {
 		return pregunta.getExplicacion();
 	}
-	
-	@Override
-	public Map<Integer,String> getTemas(){
-		Map<Integer,String> temas = examenDAO.getTemas();
-		return temas;
-	}
 
 	@Override
 	public List<PreguntaInfoVo> getAllPreguntas() {
@@ -64,6 +58,19 @@ public class BiImpl implements Bi{
 	public PreguntaInfoVo getPregunta(Long id) {
 		PreguntaInfoVo pregunta = examenDAO.getPregunta(id); 
 		return pregunta;
+	}
+	
+	
+	@Override
+	public Map<Integer,String> getTemas(){
+		Map<Integer,String> temas = examenDAO.getTemas();
+		return temas;
+	}
+	
+	@Override
+	public Map<Integer,String> getSubtemas(Long idTema){
+		Map<Integer,String> temas = examenDAO.getSubtemas(idTema);
+		return temas;
 	}
 
 }

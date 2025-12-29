@@ -71,30 +71,6 @@ public class ExamenDAOImpl implements ExamenDAO {
 		}
 		return preguntasInfoVo;
 	}
-
-	@Override
-	public Map<Integer, String> getTemas() {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Connection con = null;
-		String sql = QuerysTester.QUERY_GET_TEMAS;
-		Map<Integer,String> resultado = new HashMap<Integer, String>();
-		try {
-			con = dataSource.getConnection();
-			ps = con.prepareStatement(sql);
-			rs = ps.executeQuery();	
-			if(ps != null) {
-				while(rs.next()) {									
-					int idTema = rs.getInt("ID_TEMA");
-					String tema = rs.getString("NOMBRE_TEMA");
-					resultado.put(idTema, tema);
-				}
-			}
-		}catch(Exception e) {
-			System.out.println("Error al consultar los temas: "+e);
-		}
-		return resultado;
-	}
 	
 	@Override
 	public PreguntaInfoVo getPregunta(Long id) {
@@ -134,6 +110,55 @@ public class ExamenDAOImpl implements ExamenDAO {
 			System.out.println("Error al consultar los temas: "+e);
 		}
 		return preguntaInfoVo;
+	}
+	
+	@Override
+	public Map<Integer, String> getTemas() {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_GET_TEMAS;
+		Map<Integer,String> resultado = new HashMap<Integer, String>();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();	
+			if(ps != null) {
+				while(rs.next()) {									
+					int idTema = rs.getInt("ID_TEMA");
+					String tema = rs.getString("NOMBRE_TEMA");
+					resultado.put(idTema, tema);
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Error al consultar los temas: "+e);
+		}
+		return resultado;
+	}
+	
+	@Override
+	public Map<Integer, String> getSubtemas(Long idTema) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_GET_SUBTEMAS_ID;
+		Map<Integer,String> resultado = new HashMap<Integer, String>();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setLong(1, idTema);
+			rs = ps.executeQuery();	
+			if(ps != null) {
+				while(rs.next()) {									
+					Integer idSubTema = rs.getInt("ID_SUBTEMA");
+					String subTema = rs.getString("NOMBRE_SUBTEMA");
+					resultado.put(idSubTema, subTema);
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Error al consultar los subtemas: "+e);
+		}
+		return resultado;
 	}
 
 

@@ -1,6 +1,7 @@
 package com.examtester.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,5 +30,15 @@ public class ExamenController {
     @GetMapping("/pregunta/{id}")
     public PreguntaInfoVo getPregunta(@PathVariable("id") Long id) {
         return bi.getPregunta(id);
+    }
+    
+    @GetMapping("/temas")
+    public Map<Integer,String> getTemas() {
+        return bi.getTemas();
+    }
+    
+    @GetMapping("/subtemas/{idTema}")
+    public Map<Integer,String> getSubtemas(@PathVariable("idTema")Long idTema) {
+        return bi.getSubtemas(idTema);
     }
 }

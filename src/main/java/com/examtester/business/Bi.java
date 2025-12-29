@@ -18,10 +18,12 @@ public interface Bi {
 	
 	public String getExplicacion(Pregunta pregunta);
 	
-	public Map<Integer,String> getTemas();
-	
 	public List<PreguntaInfoVo> getAllPreguntas();
 	
 	public PreguntaInfoVo getPregunta(Long id);
+	
+	public Map<Integer,String> getTemas();
+	
+	public Map<Integer,String> getSubtemas(Long idTema);
 	
 }

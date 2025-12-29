@@ -15,7 +15,7 @@ SELECT
 	S.NOMBRE_SUBTEMA,
 	T.NOMBRE_TEMA,
 	TOP.NOMBRE_TOPICO,
-    P.ID_MATERIA,
+    M.NOMBRE_MATERIA,
     P.UNIDAD
 FROM preguntas P 
 JOIN origen ORI ON ORI.ID_ORIGEN = P.ID_ORIGEN
@@ -62,3 +62,31 @@ INSERT INTO SUBTEMA_TOPICO (ID_SUBTEMA,ID_TOPICO) VALUES (
 	(SELECT ID_SUBTEMA FROM SUBTEMA WHERE NOMBRE_SUBTEMA = 'CIBERSEGURIDAD'),
     (SELECT ID_TOPICO FROM TOPICO WHERE NOMBRE_TOPICO = 'CIBERSEGURIDAD')
     );
+    #ISNERTAR CUANDO SON DE UNIR
+INSERT INTO PREGUNTAS (
+	ID_SUBTEMA_TOPICO, 
+    ID_ORIGEN,
+    PREGUNTA,
+    RESPUESTA_A,
+    RESPUESTA_B,
+    RESPUESTA_C,
+    RESPUESTA_D,
+    RESPUESTA_CORRECTA,
+    ID_MATERIA,
+    UNIDAD) 
+	VALUES (
+    27,
+    2,
+    'El coste de realizar un ataque se denomina:',
+    'Coste de ataque.',
+    'Cost to break.',
+    'Cost to fix.',
+    'Coste de reconstrucción.',
+    'B',
+    1,
+    '1.1');
+    
+    select ST.ID_SUBTEMA_TOPICO, S.NOMBRE_SUBTEMA, T.NOMBRE_TOPICO from subtema_topico ST
+   join subtema S on S.ID_SUBTEMA = ST.ID_SUBTEMA
+   join topico T on T.ID_TOPICO = ST.ID_TOPICO
+   where ST.ID_SUBTEMA = 3;
