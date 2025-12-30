@@ -17,6 +17,19 @@ public class BiImpl implements Bi{
     public BiImpl(ExamenDAO examenDAO) {
         this.examenDAO = examenDAO;
     }
+    
+	@Override
+	public Map<Integer,String> getTemas(){
+		Map<Integer,String> temas = examenDAO.getTemas();
+		return temas;
+	}
+	
+	@Override
+	public Map<Integer,String> getSubtemas(Long idTema){
+		Map<Integer,String> temas = examenDAO.getSubtemas(idTema);
+		return temas;
+	}
+	
 
 	@Override
 	public String getQuestinamiento(Pregunta pregunta) {		
@@ -61,16 +74,7 @@ public class BiImpl implements Bi{
 	}
 	
 	
-	@Override
-	public Map<Integer,String> getTemas(){
-		Map<Integer,String> temas = examenDAO.getTemas();
-		return temas;
-	}
-	
-	@Override
-	public Map<Integer,String> getSubtemas(Long idTema){
-		Map<Integer,String> temas = examenDAO.getSubtemas(idTema);
-		return temas;
-	}
+
+
 
 }

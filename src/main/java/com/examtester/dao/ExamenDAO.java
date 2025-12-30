@@ -9,11 +9,13 @@ import com.examtester.entidad.PreguntaInfoVo;
 public interface ExamenDAO {
 	Pregunta pregunta = new Pregunta();
 	
+	public Map<Integer, String> getTemas();
+	
+	public Map<Integer, String> getSubtemas(Long idTema);
+	
 	public List <PreguntaInfoVo> getAllPreguntas();
 
 	public PreguntaInfoVo getPregunta(Long id);
 	
-	public Map<Integer, String> getTemas();
-	
-	public Map<Integer, String> getSubtemas(Long idTema);
+
 }

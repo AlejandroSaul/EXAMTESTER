@@ -8,6 +8,10 @@ import com.examtester.entidad.PreguntaInfoVo;
 
 public interface Bi {
 	
+	public Map<Integer,String> getTemas();
+	
+	public Map<Integer,String> getSubtemas(Long idTema);
+	
 	public String getQuestinamiento(Pregunta pregunta);
 	
 	public List<String> getRespuestasPosibles(Pregunta pregunta);
@@ -22,8 +26,5 @@ public interface Bi {
 	
 	public PreguntaInfoVo getPregunta(Long id);
 	
-	public Map<Integer,String> getTemas();
-	
-	public Map<Integer,String> getSubtemas(Long idTema);
 	
 }
