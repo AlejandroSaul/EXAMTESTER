@@ -12,6 +12,16 @@ public class PreguntaInfoVo {
 	private String imagenRespuestaC;
 	private String respuestaD;
 	private String imagenRespuestaD;
+	private String respuestaE;
+	private String imagenRespuestaE;
+	private String respuestaF;
+	private String imagenRespuestaF;
+	private String respuestaG;
+	private String imagenRespuestaG;
+	private String respuestaH;
+	private String imagenRespuestaH;
+	private String respuestaI;
+	private String imagenRespuestaI;
 	private String respuestaCorrecta;
 	private String origen;
 	private String nombreSubtema;
@@ -177,4 +187,126 @@ public class PreguntaInfoVo {
 	public void setImagenExplicacion(String imagenExplicacion) {
 		this.imagenExplicacion = imagenExplicacion;
 	}
+
+
+
+	public String getRespuestaE() {
+		return respuestaE;
+	}
+
+
+
+	public void setRespuestaE(String respuestaE) {
+		this.respuestaE = respuestaE;
+	}
+
+
+
+	public String getImagenRespuestaE() {
+		return imagenRespuestaE;
+	}
+
+
+
+	public void setImagenRespuestaE(String imagenRespuestaE) {
+		this.imagenRespuestaE = imagenRespuestaE;
+	}
+
+
+
+	public String getRespuestaF() {
+		return respuestaF;
+	}
+
+
+
+	public void setRespuestaF(String respuestaF) {
+		this.respuestaF = respuestaF;
+	}
+
+
+
+	public String getImagenRespuestaF() {
+		return imagenRespuestaF;
+	}
+
+
+
+	public void setImagenRespuestaF(String imagenRespuestaF) {
+		this.imagenRespuestaF = imagenRespuestaF;
+	}
+
+
+
+	public String getRespuestaG() {
+		return respuestaG;
+	}
+
+
+
+	public void setRespuestaG(String respuestaG) {
+		this.respuestaG = respuestaG;
+	}
+
+
+
+	public String getImagenRespuestaG() {
+		return imagenRespuestaG;
+	}
+
+
+
+	public void setImagenRespuestaG(String imagenRespuestaG) {
+		this.imagenRespuestaG = imagenRespuestaG;
+	}
+
+
+
+	public String getRespuestaH() {
+		return respuestaH;
+	}
+
+
+
+	public void setRespuestaH(String respuestaH) {
+		this.respuestaH = respuestaH;
+	}
+
+
+
+	public String getImagenRespuestaH() {
+		return imagenRespuestaH;
+	}
+
+
+
+	public void setImagenRespuestaH(String imagenRespuestaH) {
+		this.imagenRespuestaH = imagenRespuestaH;
+	}
+
+
+
+	public String getRespuestaI() {
+		return respuestaI;
+	}
+
+
+
+	public void setRespuestaI(String respuestaI) {
+		this.respuestaI = respuestaI;
+	}
+
+
+
+	public String getImagenRespuestaI() {
+		return imagenRespuestaI;
+	}
+
+
+
+	public void setImagenRespuestaI(String imagenRespuestaI) {
+		this.imagenRespuestaI = imagenRespuestaI;
+	}
+	
+	
 }

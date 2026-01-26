@@ -10,11 +10,21 @@ public class ConstantesTester {
 	public static final String CONST_IMAGEN_B = "IMAGEN_RESP_B";
 	public static final String CONST_IMAGEN_C = "IMAGEN_RESP_C";
 	public static final String CONST_IMAGEN_D = "IMAGEN_RESP_D";
+	public static final String CONST_IMAGEN_E = "IMAGEN_RESP_E";
+	public static final String CONST_IMAGEN_F = "IMAGEN_RESP_F";
+	public static final String CONST_IMAGEN_G = "IMAGEN_RESP_G";
+	public static final String CONST_IMAGEN_H = "IMAGEN_RESP_H";
+	public static final String CONST_IMAGEN_I = "IMAGEN_RESP_I";
 	public static final String CONST_RUTA_ARCHIVO = "RUTA_ARCHIVO";
 	public static final String CONST_RESPUESTA_A = "RESPUESTA_A";
 	public static final String CONST_RESPUESTA_B = "RESPUESTA_B";
 	public static final String CONST_RESPUESTA_C = "RESPUESTA_C";
 	public static final String CONST_RESPUESTA_D = "RESPUESTA_D";
+	public static final String CONST_RESPUESTA_E = "RESPUESTA_E";
+	public static final String CONST_RESPUESTA_F = "RESPUESTA_F";
+	public static final String CONST_RESPUESTA_G = "RESPUESTA_G";
+	public static final String CONST_RESPUESTA_H = "RESPUESTA_H";
+	public static final String CONST_RESPUESTA_I = "RESPUESTA_I";
 	public static final String CONST_RESPUESTA_CORRECTA = "RESPUESTA_CORRECTA";
 	public static final String CONST_EXPLICACION = "EXPLICACION";
 	public static final String CONST_IMAGEN_EXPLICACION = "IMAGEN_EXPLICA";
@@ -25,4 +35,5 @@ public class ConstantesTester {
 	public static final String CONST_NOMBRE_TOPICO = "NOMBRE_TOPICO";
 	public static final String CONST_NOMBRE_MATERIA = "NOMBRE_MATERIA";
 	public static final String CONST_UNIDAD = "UNIDAD";
+	public static final String CONST_GUION = "-";
 }
