@@ -123,54 +123,59 @@ public class ExamenDAOImpl implements ExamenDAO {
 	@SuppressWarnings("unused")
 	@Override
 	public PreguntaInfoVo getPregunta(Long id) {
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Connection con = null;
-		String sql = QuerysTester.QUERY_GET_PREGUNTA;
-		PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
-		try {
-			con = dataSource.getConnection();
-			ps = con.prepareStatement(sql);
-			ps.setLong(1, id);
-			rs = ps.executeQuery();	
-			if(ps != null) {
-				while(rs.next()) {									
-					preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
-					preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
-					preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));					
-					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));					
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));
-					preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
-					preguntaInfoVo.setImagenRespuestaB(rs.getString(ConstantesTester.CONST_IMAGEN_B));					
-					preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
-					preguntaInfoVo.setImagenRespuestaC(rs.getString(ConstantesTester.CONST_IMAGEN_C));					
-					preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
-					preguntaInfoVo.setImagenRespuestaD(rs.getString(ConstantesTester.CONST_IMAGEN_D));					
-					preguntaInfoVo.setRespuestaE(rs.getString(ConstantesTester.CONST_RESPUESTA_E));
-					preguntaInfoVo.setImagenRespuestaE(rs.getString(ConstantesTester.CONST_IMAGEN_E));					
-					preguntaInfoVo.setRespuestaF(rs.getString(ConstantesTester.CONST_RESPUESTA_F));
-					preguntaInfoVo.setImagenRespuestaF(rs.getString(ConstantesTester.CONST_IMAGEN_F));					
-					preguntaInfoVo.setRespuestaG(rs.getString(ConstantesTester.CONST_RESPUESTA_G));					
-					preguntaInfoVo.setImagenRespuestaG(rs.getString(ConstantesTester.CONST_IMAGEN_G));					
-					preguntaInfoVo.setRespuestaH(rs.getString(ConstantesTester.CONST_RESPUESTA_H));
-					preguntaInfoVo.setImagenRespuestaH(rs.getString(ConstantesTester.CONST_IMAGEN_H));					
-					preguntaInfoVo.setRespuestaI(rs.getString(ConstantesTester.CONST_RESPUESTA_I));
-					preguntaInfoVo.setImagenRespuestaI(rs.getString(ConstantesTester.CONST_IMAGEN_I));					
-					preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
-					preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
-					preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
-					preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
-					preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
-					preguntaInfoVo.setExplicacion(rs.getString(ConstantesTester.CONST_EXPLICACION));
-					preguntaInfoVo.setImagenExplicacion(rs.getString(ConstantesTester.CONST_IMAGEN_EXPLICACION));
-				}
-				asiganVacios(preguntaInfoVo);
-			}
-		}catch(Exception e) {
-			System.out.println("Error al consultar los temas: "+e);
-		}
-		return preguntaInfoVo;
+
+	    String sql = QuerysTester.QUERY_GET_PREGUNTA;
+	    PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
+
+	    try (Connection con = dataSource.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+
+	        ps.setLong(1, id);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+
+	            if (rs.next()) {
+	                preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
+	                preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
+	                preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));
+	                preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));
+	                preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));
+	                preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
+	                preguntaInfoVo.setImagenRespuestaB(rs.getString(ConstantesTester.CONST_IMAGEN_B));
+	                preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
+	                preguntaInfoVo.setImagenRespuestaC(rs.getString(ConstantesTester.CONST_IMAGEN_C));
+	                preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
+	                preguntaInfoVo.setImagenRespuestaD(rs.getString(ConstantesTester.CONST_IMAGEN_D));
+	                preguntaInfoVo.setRespuestaE(rs.getString(ConstantesTester.CONST_RESPUESTA_E));
+	                preguntaInfoVo.setImagenRespuestaE(rs.getString(ConstantesTester.CONST_IMAGEN_E));
+	                preguntaInfoVo.setRespuestaF(rs.getString(ConstantesTester.CONST_RESPUESTA_F));
+	                preguntaInfoVo.setImagenRespuestaF(rs.getString(ConstantesTester.CONST_IMAGEN_F));
+	                preguntaInfoVo.setRespuestaG(rs.getString(ConstantesTester.CONST_RESPUESTA_G));
+	                preguntaInfoVo.setImagenRespuestaG(rs.getString(ConstantesTester.CONST_IMAGEN_G));
+	                preguntaInfoVo.setRespuestaH(rs.getString(ConstantesTester.CONST_RESPUESTA_H));
+	                preguntaInfoVo.setImagenRespuestaH(rs.getString(ConstantesTester.CONST_IMAGEN_H));
+	                preguntaInfoVo.setRespuestaI(rs.getString(ConstantesTester.CONST_RESPUESTA_I));
+	                preguntaInfoVo.setImagenRespuestaI(rs.getString(ConstantesTester.CONST_IMAGEN_I));
+	                preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
+	                preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
+	                preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
+	                preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
+	                preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
+	                preguntaInfoVo.setExplicacion(rs.getString(ConstantesTester.CONST_EXPLICACION));
+	                preguntaInfoVo.setImagenExplicacion(rs.getString(ConstantesTester.CONST_IMAGEN_EXPLICACION));
+	            }
+	        }
+
+	        asiganVacios(preguntaInfoVo);
+
+	    } catch (Exception e) {
+	        System.err.println("Error al consultar pregunta: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+
+	    return preguntaInfoVo;
 	}
+
 	
 	private void asiganVacios(PreguntaInfoVo preguntaInfoVo) {
 		if(preguntaInfoVo.getRespuestaA() == null) {

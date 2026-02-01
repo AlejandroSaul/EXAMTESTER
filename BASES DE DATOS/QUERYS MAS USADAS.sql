@@ -90,3 +90,23 @@ INSERT INTO PREGUNTAS (
    join subtema S on S.ID_SUBTEMA = ST.ID_SUBTEMA
    join topico T on T.ID_TOPICO = ST.ID_TOPICO
    where ST.ID_SUBTEMA = 3;
+   
+   
+   #Sacar IDS de un tema subtema topico en especial
+   select * from preguntas;
+   select * from subtema;
+   select * from tema;
+   select * from topico;
+   select * from subtema_topico;
+   select * from origen;
+   
+   #Union Tema Subtema
+   select * from tema t
+   join subtema st on st.ID_TEMA = t.ID_TEMA;  
+   
+   # union subtema topico
+   select sto.ID_SUBTEMA_TOPICO, NOMBRE_SUBTEMA, NOMBRE_TOPICO from subtema_topico sto
+   join subtema st on sto.ID_SUBTEMA = st.ID_SUBTEMA
+   join topico t on sto.ID_TOPICO = t.ID_TOPICO;
+   
+   select * from preguntas where ID_SUBTEMA_TOPICO in (27);
