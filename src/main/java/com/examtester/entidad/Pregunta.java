@@ -13,12 +13,23 @@ public class Pregunta {
 	private String respuestaB;
 	private String respuestaC;
 	private String respuestaD;
+	private String respuestaE;
+	private String respuestaF;
+	private String respuestaG;
+	private String respuestaH;
+	private String respuestaI;
 	private String respuestaCorrecta;
+	private Integer idMateria;
 	private String explicacion;
+	
+	private String unidad;
+
+
 
 	public Pregunta(Integer idPregunta, Integer idSubtemaTopico, Integer idOrigen, String pregunta, String imagen,
 			String rutaArchivo, String respuestaA, String respuestaB, String respuestaC, String respuestaD,
-			String respuestaCorrecta, String explicacion) {
+			String respuestaE, String respuestaF, String respuestaG, String respuestaH, String respuestaI,
+			String respuestaCorrecta, Integer idMateria, String explicacion, String unidad) {
 		super();
 		this.idPregunta = idPregunta;
 		this.idSubtemaTopico = idSubtemaTopico;
@@ -30,8 +41,15 @@ public class Pregunta {
 		this.respuestaB = respuestaB;
 		this.respuestaC = respuestaC;
 		this.respuestaD = respuestaD;
+		this.respuestaE = respuestaE;
+		this.respuestaF = respuestaF;
+		this.respuestaG = respuestaG;
+		this.respuestaH = respuestaH;
+		this.respuestaI = respuestaI;
 		this.respuestaCorrecta = respuestaCorrecta;
+		this.idMateria = idMateria;
 		this.explicacion = explicacion;
+		this.unidad = unidad;
 	}
 
 	public Pregunta() {
@@ -134,12 +152,73 @@ public class Pregunta {
 		this.explicacion = explicacion;
 	}
 
+
+	public String getRespuestaE() {
+		return respuestaE;
+	}
+
+	public void setRespuestaE(String respuestaE) {
+		this.respuestaE = respuestaE;
+	}
+
+	public String getRespuestaF() {
+		return respuestaF;
+	}
+
+	public void setRespuestaF(String respuestaF) {
+		this.respuestaF = respuestaF;
+	}
+
+	public String getRespuestaG() {
+		return respuestaG;
+	}
+
+	public void setRespuestaG(String respuestaG) {
+		this.respuestaG = respuestaG;
+	}
+
+	public String getRespuestaH() {
+		return respuestaH;
+	}
+
+	public void setRespuestaH(String respuestaH) {
+		this.respuestaH = respuestaH;
+	}
+
+	public String getRespuestaI() {
+		return respuestaI;
+	}
+
+	public void setRespuestaI(String respuestaI) {
+		this.respuestaI = respuestaI;
+	}
+	
+
+	public String getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(String unidad) {
+		this.unidad = unidad;
+	}
+	
+	public Integer getIdMateria() {
+		return idMateria;
+	}
+
+	public void setIdMateria(Integer idMateria) {
+		this.idMateria = idMateria;
+	}
+
 	@Override
 	public String toString() {
-		return "Preguntas [idPregunta=" + idPregunta + ", idSubtemaTopico=" + idSubtemaTopico + ", idOrigen=" + idOrigen
+		return "Pregunta [idPregunta=" + idPregunta + ", idSubtemaTopico=" + idSubtemaTopico + ", idOrigen=" + idOrigen
 				+ ", pregunta=" + pregunta + ", imagen=" + imagen + ", rutaArchivo=" + rutaArchivo + ", respuestaA="
 				+ respuestaA + ", respuestaB=" + respuestaB + ", respuestaC=" + respuestaC + ", respuestaD="
-				+ respuestaD + ", respuestaCorrecta=" + respuestaCorrecta + ", explicacion=" + explicacion + "]";
+				+ respuestaD + ", respuestaE=" + respuestaE + ", respuestaF=" + respuestaF + ", respuestaG="
+				+ respuestaG + ", respuestaH=" + respuestaH + ", respuestaI=" + respuestaI + ", respuestaCorrecta="
+				+ respuestaCorrecta + ", idMateria=" + idMateria + ", explicacion=" + explicacion + ", unidad=" + unidad
+				+ "]";
 	}
 
 	@Override

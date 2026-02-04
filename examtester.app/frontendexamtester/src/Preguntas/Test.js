@@ -2,7 +2,12 @@ import React from 'react'
 import { useEffect, useState } from "react"
 
 export default function Pregunta() {
-  const ids = [137,1]
+  const inicio = 137;
+  const fin = 259;
+  const ids = Array.from(
+  { length: fin - inicio + 1 },
+  (_, i) => inicio + i);
+
   const [id, setId] = useState(ids[0])
   const [pregunta, setPregunta] = useState(null)
   const [seleccionadas, setSeleccionadas] = useState([])

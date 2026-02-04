@@ -254,54 +254,38 @@ public class PreguntaInfoVo {
 		return imagenRespuestaG;
 	}
 
-
-
 	public void setImagenRespuestaG(String imagenRespuestaG) {
 		this.imagenRespuestaG = imagenRespuestaG;
 	}
-
-
 
 	public String getRespuestaH() {
 		return respuestaH;
 	}
 
-
-
 	public void setRespuestaH(String respuestaH) {
 		this.respuestaH = respuestaH;
 	}
-
-
 
 	public String getImagenRespuestaH() {
 		return imagenRespuestaH;
 	}
 
-
-
 	public void setImagenRespuestaH(String imagenRespuestaH) {
 		this.imagenRespuestaH = imagenRespuestaH;
 	}
 
-
-
 	public String getRespuestaI() {
 		return respuestaI;
 	}
-
-
 
 	public void setRespuestaI(String respuestaI) {
 		this.respuestaI = respuestaI;
 	}
 
 
-
 	public String getImagenRespuestaI() {
 		return imagenRespuestaI;
 	}
-
 
 
 	public void setImagenRespuestaI(String imagenRespuestaI) {

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import com.examtester.constantes.ConstantesTester;
 import com.examtester.constantes.QuerysTester;
+import com.examtester.entidad.GenericResponse;
+import com.examtester.entidad.Pregunta;
 import com.examtester.entidad.PreguntaInfoVo;
 
 @Repository
@@ -174,6 +176,102 @@ public class ExamenDAOImpl implements ExamenDAO {
 	    }
 
 	    return preguntaInfoVo;
+	}
+	
+	@Override
+	public GenericResponse insertarPregunta(Pregunta pregunta) {
+
+	    GenericResponse response = new GenericResponse();
+	    
+        if (pregunta.getPregunta() != null
+                && pregunta.getIdSubtemaTopico() != null
+                && pregunta.getIdOrigen() != null
+                && pregunta.getRespuestaCorrecta() != null
+                && pregunta.getRespuestaA() != null
+                && pregunta.getRespuestaB() != null) {
+        	StringBuilder sql = new StringBuilder();
+        	sql.append("INSERT INTO PREGUNTAS (");
+        	sql.append("ID_PREGUNTA, ID_SUBTEMA_TOPICO, ID_ORIGEN, ");
+        	sql.append("RESPUESTA_CORRECTA, PREGUNTA, RESPUESTA_A, RESPUESTA_B");
+
+        	asignaQueryOpcionales(sql,pregunta);
+
+        	sql.append(") VALUES (?,?,?,?,?,?,?");
+
+        	if (pregunta.getRespuestaC() != null) sql.append(",?");
+        	if (pregunta.getRespuestaD() != null) sql.append(",?");
+        	if (pregunta.getRespuestaE() != null) sql.append(",?");
+        	if (pregunta.getRespuestaF() != null) sql.append(",?");
+        	if (pregunta.getRespuestaG() != null) sql.append(",?");
+        	if (pregunta.getRespuestaH() != null) sql.append(",?");
+        	if (pregunta.getRespuestaI() != null) sql.append(",?");
+        	if (pregunta.getIdMateria() != null) sql.append(",?");
+        	if (pregunta.getUnidad() != null) sql.append(",?");
+
+        	sql.append(")");
+
+        	try (Connection con = dataSource.getConnection();
+        			PreparedStatement ps = con.prepareStatement(sql.toString())) {
+
+        		Integer i = 1;
+
+        		ps.setInt(i++, pregunta.getIdPregunta());
+        		ps.setInt(i++, pregunta.getIdSubtemaTopico());
+        		ps.setInt(i++, pregunta.getIdOrigen());
+        		ps.setString(i++, pregunta.getRespuestaCorrecta());
+        		ps.setString(i++, pregunta.getPregunta());
+        		ps.setString(i++, pregunta.getRespuestaA());
+        		ps.setString(i++, pregunta.getRespuestaB());
+
+        		i = asignaQueryValoresOpcionales(ps, i, pregunta);
+
+        		ps.executeUpdate();
+
+        		response.setCodigo(0);
+        		response.setMensaje("Pregunta insertada correctamente");
+
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        		response.setCodigo(1);
+        		response.setMensaje("Error al insertar pregunta");
+        	}
+        } else {
+        	response.setCodigo(2);
+        	response.setMensaje("Error al insertar los datos");
+        }
+	    return response;
+	}
+
+
+	
+	private void asignaQueryOpcionales(StringBuilder sql, Pregunta pregunta) {
+	    if (pregunta.getRespuestaC() != null) sql.append(", RESPUESTA_C");
+	    if (pregunta.getRespuestaD() != null) sql.append(", RESPUESTA_D");
+	    if (pregunta.getRespuestaE() != null) sql.append(", RESPUESTA_E");
+	    if (pregunta.getRespuestaF() != null) sql.append(", RESPUESTA_F");
+	    if (pregunta.getRespuestaG() != null) sql.append(", RESPUESTA_G");
+	    if (pregunta.getRespuestaH() != null) sql.append(", RESPUESTA_H");
+	    if (pregunta.getRespuestaI() != null) sql.append(", RESPUESTA_I");
+	    if (pregunta.getIdMateria() != null) sql.append(", ID_MATERIA");
+	    if (pregunta.getUnidad() != null) sql.append(", UNIDAD");
+	}
+
+	private int asignaQueryValoresOpcionales(PreparedStatement ps, Integer i, Pregunta pregunta) throws Exception {
+		try {
+		       if (pregunta.getRespuestaC() != null) ps.setString(i++, pregunta.getRespuestaC());
+		        if (pregunta.getRespuestaD() != null) ps.setString(i++, pregunta.getRespuestaD());
+		        if (pregunta.getRespuestaE() != null) ps.setString(i++, pregunta.getRespuestaE());
+		        if (pregunta.getRespuestaF() != null) ps.setString(i++, pregunta.getRespuestaF());
+		        if (pregunta.getRespuestaG() != null) ps.setString(i++, pregunta.getRespuestaG());
+		        if (pregunta.getRespuestaH() != null) ps.setString(i++, pregunta.getRespuestaH());
+		        if (pregunta.getRespuestaI() != null) ps.setString(i++, pregunta.getRespuestaI());
+		        if (pregunta.getIdMateria() != null) ps.setInt(i++, pregunta.getIdMateria());
+		        if (pregunta.getUnidad() != null) ps.setString(i++, pregunta.getUnidad());
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+		}
+		return i;
 	}
 
 	

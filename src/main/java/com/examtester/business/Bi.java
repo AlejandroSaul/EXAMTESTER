@@ -3,6 +3,7 @@ package com.examtester.business;
 import java.util.List;
 import java.util.Map;
 
+import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
 import com.examtester.entidad.PreguntaInfoVo;
 
@@ -26,5 +27,6 @@ public interface Bi {
 	
 	public PreguntaInfoVo getPregunta(Long id);
 	
+	public GenericResponse insertarPregunta(Pregunta pregunta);
 	
 }

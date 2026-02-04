@@ -3,6 +3,7 @@ package com.examtester.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
 import com.examtester.entidad.PreguntaInfoVo;
 
@@ -17,5 +18,6 @@ public interface ExamenDAO {
 
 	public PreguntaInfoVo getPregunta(Long id);
 	
+	public GenericResponse insertarPregunta(Pregunta pregunta);
 
 }

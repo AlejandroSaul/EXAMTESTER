@@ -1,0 +1,8 @@
+/*
+-- Query: SELECT * FROM preguntas_examen.ORIGEN
+LIMIT 0, 1000
+
+-- Date: 2026-02-03 12:47
+*/
+INSERT INTO `` (`ID_ORIGEN`,`ORIGEN`) VALUES (1,'CHATGPT');
+INSERT INTO `` (`ID_ORIGEN`,`ORIGEN`) VALUES (2,'UNIR');

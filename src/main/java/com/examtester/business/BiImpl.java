@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.examtester.dao.ExamenDAO;
+import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
 import com.examtester.entidad.PreguntaInfoVo;
 
@@ -71,6 +72,12 @@ public class BiImpl implements Bi{
 	public PreguntaInfoVo getPregunta(Long id) {
 		PreguntaInfoVo pregunta = examenDAO.getPregunta(id); 
 		return pregunta;
+	}
+	
+	@Override
+	public GenericResponse insertarPregunta(Pregunta pregunta) {
+		GenericResponse  respuesta = examenDAO.insertarPregunta(pregunta);
+		return respuesta;
 	}
 	
 	
