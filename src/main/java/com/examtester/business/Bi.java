@@ -1,5 +1,6 @@
 package com.examtester.business;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,10 @@ public interface Bi {
 	
 	public Map<Integer,String> getSubtemas(Long idTema);
 	
-	public String getQuestinamiento(Pregunta pregunta);
+	public Map<Integer,String> getTopicos(Long idSubtema);
+	
+	public PreguntaInfoVo getPreguntaXSubtemaTopico(Long idSubtemaTopico);
+
 	
 	public List<String> getRespuestasPosibles(Pregunta pregunta);
 	

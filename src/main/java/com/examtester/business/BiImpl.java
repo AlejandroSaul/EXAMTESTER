@@ -1,8 +1,10 @@
 package com.examtester.business;
 
+import java.rmi.server.LoaderHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
@@ -33,8 +35,24 @@ public class BiImpl implements Bi{
 	
 
 	@Override
-	public String getQuestinamiento(Pregunta pregunta) {		
-		return pregunta.getPregunta();
+	public Map<Integer,String> getTopicos(Long idSubtema) {		
+		return examenDAO.getTopicos(idSubtema);
+	}
+	
+	@Override
+	public PreguntaInfoVo getPregunta(Long id) {
+		PreguntaInfoVo pregunta = examenDAO.getPregunta(id); 
+		return pregunta;
+	}
+	
+	@Override
+	public PreguntaInfoVo getPreguntaXSubtemaTopico(Long idSubtemaTopico) {
+		ArrayList<Integer> arregloPreguntas = examenDAO.getPreguntasXSubtemaTopico(idSubtemaTopico);
+		Integer longitud  = arregloPreguntas.size();
+		Random random = new Random();
+		Integer posicionAleatoria = random.nextInt(0, longitud-1) ;
+		Long idPregunta =  Long.parseLong(arregloPreguntas.get(posicionAleatoria).toString());
+		return getPregunta(idPregunta);
 	}
 	
 	@Override
@@ -68,16 +86,26 @@ public class BiImpl implements Bi{
 		return preguntas;
 	}
 	
-	@Override
-	public PreguntaInfoVo getPregunta(Long id) {
-		PreguntaInfoVo pregunta = examenDAO.getPregunta(id); 
-		return pregunta;
-	}
+
 	
 	@Override
 	public GenericResponse insertarPregunta(Pregunta pregunta) {
-		GenericResponse  respuesta = examenDAO.insertarPregunta(pregunta);
-		return respuesta;
+		GenericResponse  respuesta = new GenericResponse(); 
+        if (pregunta.getPregunta() != null
+                && pregunta.getIdSubtemaTopico() != null
+                && pregunta.getIdOrigen() != null
+                && pregunta.getRespuestaCorrecta() != null
+                && pregunta.getRespuestaA() != null
+                && pregunta.getRespuestaB() != null) {
+        	
+    		respuesta = examenDAO.insertarPregunta(pregunta);
+        	
+        } else {
+        	respuesta.setCodigo(2);
+        	respuesta.setMensaje("Error al insertar los datos");
+        }
+		
+        return respuesta;
 	}
 	
 	

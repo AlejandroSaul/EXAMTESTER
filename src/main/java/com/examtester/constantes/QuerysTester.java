@@ -7,7 +7,12 @@ public class QuerysTester {
 	public static final String QUERY_GET_SUBTEMAS = "SELECT * FROM SUBTEMA";
 	public static final String QUERY_GET_TOPICO = "SELECT * FROM TOPICO";
 	public static final String QUERY_GET_SUBTEMAS_ID = "SELECT * FROM SUBTEMA WHERE ID_TEMA = ?";
-	
+	public static final String QUERY_GET_TOPICOS = "SELECT sto.ID_SUBTEMA_TOPICO, NOMBRE_SUBTEMA, NOMBRE_TOPICO from subtema_topico sto "
+			+ "join subtema st on sto.ID_SUBTEMA = st.ID_SUBTEMA "
+			+ "join topico t on sto.ID_TOPICO = t.ID_TOPICO "
+			+ "WHERE st.ID_SUBTEMA = ? ";
+	public static final String QUERY_GET_PREGUNTAS_SUBTEMATOPICO = "SELECT ID_PREGUNTA FROM PREGUNTAS "
+			+ "WHERE ID_SUBTEMA_TOPICO = ? ";
 	public static final String QUERY_GET_ALL_PREGUNTAS = "SELECT "
 		    + "P.ID_PREGUNTA, "
 		    + "P.PREGUNTA, "

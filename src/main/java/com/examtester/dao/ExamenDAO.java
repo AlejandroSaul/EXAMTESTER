@@ -1,5 +1,6 @@
 package com.examtester.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,10 @@ public interface ExamenDAO {
 	public Map<Integer, String> getTemas();
 	
 	public Map<Integer, String> getSubtemas(Long idTema);
+	
+	public Map<Integer, String> getTopicos(Long idSubtema);
+	
+	public ArrayList<Integer> getPreguntasXSubtemaTopico(Long idSubtemaTopico);
 	
 	public List <PreguntaInfoVo> getAllPreguntas();
 

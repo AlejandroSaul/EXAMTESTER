@@ -47,6 +47,14 @@ public class ExamenDAOImpl implements ExamenDAO {
 			}
 		}catch(Exception e) {
 			System.out.println("Error al consultar los temas: "+e);
+		} finally {
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones"+e);
+			}
 		}
 		return resultado;
 	}
@@ -72,46 +80,7 @@ public class ExamenDAOImpl implements ExamenDAO {
 			}
 		}catch(Exception e) {
 			System.out.println("Error al consultar los subtemas: "+e);
-		}
-		return resultado;
-	}
-
-	@Override
-	public List<PreguntaInfoVo> getAllPreguntas() {
-		String sql = QuerysTester.QUERY_GET_ALL_PREGUNTAS;
-		PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Connection con = null;
-		List<PreguntaInfoVo> preguntasInfoVo = new ArrayList();
-		try {
-			con = dataSource.getConnection();
-			ps = con.prepareStatement(sql);
-			if(ps != null) {
-				rs = ps.executeQuery();
-				while(rs.next()) {
-					preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
-					preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
-					preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));					
-					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));					
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));					
-					preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_B));					
-					preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_C));					
-					preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_D));					
-					preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
-					preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
-					preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
-					preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
-					preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
-					preguntasInfoVo.add(preguntaInfoVo);
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Error al obtener el PreparedStatement" + e);
-		} finally {
+		}finally {
 			try {
 				rs.close();
 				ps.close();
@@ -120,8 +89,78 @@ public class ExamenDAOImpl implements ExamenDAO {
 				System.out.println("Error al cerrar las conexiones"+e);
 			}
 		}
-		return preguntasInfoVo;
+		return resultado;
 	}
+	
+	@Override
+	public Map<Integer, String> getTopicos(Long idSubtema){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_GET_TOPICOS;
+		Map<Integer,String> resultado = new HashMap<Integer, String>();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setLong(1, idSubtema);
+			rs = ps.executeQuery();	
+			if(ps != null) {
+				while(rs.next()) {									
+					Integer idSubtemaTopico = rs.getInt("ID_SUBTEMA_TOPICO");
+					String topico = rs.getString("NOMBRE_TOPICO");
+					resultado.put(idSubtemaTopico, topico);
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Error al consultar los subtemas: "+e);
+		}finally {
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones"+e);
+			}
+		}
+		return resultado;
+	}
+	
+	@Override
+	public ArrayList<Integer> getPreguntasXSubtemaTopico(Long idSubtemaTopico) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_GET_PREGUNTAS_SUBTEMATOPICO;
+		ArrayList<Integer> arregloPreguntas = new ArrayList<Integer>();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setLong(1, idSubtemaTopico);
+			rs = ps.executeQuery();	
+			if(ps != null) {
+				while(rs.next()) {									
+					Integer idPregunta = rs.getInt("ID_PREGUNTA");
+					arregloPreguntas.add(idPregunta);
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Error al consultar las preguntas: "+e);
+		}finally {
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones"+e);
+			}
+		}
+		return arregloPreguntas;
+	}
+	
+	
+
+
+	
 	@SuppressWarnings("unused")
 	@Override
 	public PreguntaInfoVo getPregunta(Long id) {
@@ -178,17 +217,59 @@ public class ExamenDAOImpl implements ExamenDAO {
 	    return preguntaInfoVo;
 	}
 	
+
+	@Override
+	public List<PreguntaInfoVo> getAllPreguntas() {
+		String sql = QuerysTester.QUERY_GET_ALL_PREGUNTAS;
+		PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		List<PreguntaInfoVo> preguntasInfoVo = new ArrayList();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			if(ps != null) {
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
+					preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
+					preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));					
+					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));					
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));					
+					preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_B));					
+					preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_C));					
+					preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
+					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_D));					
+					preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
+					preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
+					preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
+					preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
+					preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
+					preguntasInfoVo.add(preguntaInfoVo);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Error al obtener el PreparedStatement" + e);
+		} finally {
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones"+e);
+			}
+		}
+		return preguntasInfoVo;
+	}
+	
 	@Override
 	public GenericResponse insertarPregunta(Pregunta pregunta) {
 
 	    GenericResponse response = new GenericResponse();
 	    
-        if (pregunta.getPregunta() != null
-                && pregunta.getIdSubtemaTopico() != null
-                && pregunta.getIdOrigen() != null
-                && pregunta.getRespuestaCorrecta() != null
-                && pregunta.getRespuestaA() != null
-                && pregunta.getRespuestaB() != null) {
         	StringBuilder sql = new StringBuilder();
         	sql.append("INSERT INTO PREGUNTAS (");
         	sql.append("ID_PREGUNTA, ID_SUBTEMA_TOPICO, ID_ORIGEN, ");
@@ -220,8 +301,8 @@ public class ExamenDAOImpl implements ExamenDAO {
         		ps.setInt(i++, pregunta.getIdOrigen());
         		ps.setString(i++, pregunta.getRespuestaCorrecta());
         		ps.setString(i++, pregunta.getPregunta());
-        		ps.setString(i++, pregunta.getRespuestaA());
-        		ps.setString(i++, pregunta.getRespuestaB());
+        		ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaA(),"A"));
+        		ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaB(),"B"));
 
         		i = asignaQueryValoresOpcionales(ps, i, pregunta);
 
@@ -235,10 +316,6 @@ public class ExamenDAOImpl implements ExamenDAO {
         		response.setCodigo(1);
         		response.setMensaje("Error al insertar pregunta");
         	}
-        } else {
-        	response.setCodigo(2);
-        	response.setMensaje("Error al insertar los datos");
-        }
 	    return response;
 	}
 
@@ -258,13 +335,13 @@ public class ExamenDAOImpl implements ExamenDAO {
 
 	private int asignaQueryValoresOpcionales(PreparedStatement ps, Integer i, Pregunta pregunta) throws Exception {
 		try {
-		       if (pregunta.getRespuestaC() != null) ps.setString(i++, pregunta.getRespuestaC());
-		        if (pregunta.getRespuestaD() != null) ps.setString(i++, pregunta.getRespuestaD());
-		        if (pregunta.getRespuestaE() != null) ps.setString(i++, pregunta.getRespuestaE());
-		        if (pregunta.getRespuestaF() != null) ps.setString(i++, pregunta.getRespuestaF());
-		        if (pregunta.getRespuestaG() != null) ps.setString(i++, pregunta.getRespuestaG());
-		        if (pregunta.getRespuestaH() != null) ps.setString(i++, pregunta.getRespuestaH());
-		        if (pregunta.getRespuestaI() != null) ps.setString(i++, pregunta.getRespuestaI());
+		       if (pregunta.getRespuestaC() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaC(),"C"));
+		        if (pregunta.getRespuestaD() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaD(),"D") );
+		        if (pregunta.getRespuestaE() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaE(),"E") );
+		        if (pregunta.getRespuestaF() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaF(),"F"));
+		        if (pregunta.getRespuestaG() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaG(),"G"));
+		        if (pregunta.getRespuestaH() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaH(),"H"));
+		        if (pregunta.getRespuestaI() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaI(),"I"));
 		        if (pregunta.getIdMateria() != null) ps.setInt(i++, pregunta.getIdMateria());
 		        if (pregunta.getUnidad() != null) ps.setString(i++, pregunta.getUnidad());
 		} catch (Exception e) {
@@ -274,38 +351,31 @@ public class ExamenDAOImpl implements ExamenDAO {
 		return i;
 	}
 
-	
+	/**
+	 * Método que asigna un guion de los datos vacios no obligatorias de una pregunta
+	 * @param preguntaInfoVo value object que guarda la información traida de la entidad
+	 * @author Alejandro Saul Baños Vega
+	 * */
 	private void asiganVacios(PreguntaInfoVo preguntaInfoVo) {
-		if(preguntaInfoVo.getRespuestaA() == null) {
-			preguntaInfoVo.setRespuestaA(ConstantesTester.CONST_GUION);
+		asignarRespuestasVacias(preguntaInfoVo);
+		
+		asignarImagenesVacias(preguntaInfoVo);
+		
+		if(preguntaInfoVo.getExplicacion() == null) {
+			preguntaInfoVo.setExplicacion(ConstantesTester.CONST_GUION);
+		}		
+		if(preguntaInfoVo.getImagenExplicacion() == null) {
+			preguntaInfoVo.setImagenExplicacion(ConstantesTester.CONST_GUION);
 		}
-		if(preguntaInfoVo.getRespuestaB() == null) {
-			preguntaInfoVo.setRespuestaB(ConstantesTester.CONST_GUION);
+		if(preguntaInfoVo.getNombreMateria() == null) {
+			preguntaInfoVo.setNombreMateria(ConstantesTester.CONST_GUION);
 		}
-		if(preguntaInfoVo.getRespuestaC() == null) {
-			preguntaInfoVo.setRespuestaC(ConstantesTester.CONST_GUION);
+		if(preguntaInfoVo.getUnidad() == null) {
+			preguntaInfoVo.setUnidad(ConstantesTester.CONST_GUION);
 		}
-		if(preguntaInfoVo.getRespuestaC() == null) {
-			preguntaInfoVo.setRespuestaC(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getRespuestaD() == null) {
-			preguntaInfoVo.setRespuestaD(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getRespuestaE() == null) {
-			preguntaInfoVo.setRespuestaE(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getRespuestaF() == null) {
-			preguntaInfoVo.setRespuestaF(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getRespuestaG() == null) {
-			preguntaInfoVo.setRespuestaG(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getRespuestaH() == null) {
-			preguntaInfoVo.setRespuestaH(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getRespuestaI() == null) {
-			preguntaInfoVo.setRespuestaI(ConstantesTester.CONST_GUION);
-		}
+	}
+
+	private void asignarImagenesVacias(PreguntaInfoVo preguntaInfoVo) {
 		if(preguntaInfoVo.getImagenRespuestaA() == null) {
 			preguntaInfoVo.setImagenRespuestaA(ConstantesTester.CONST_GUION);
 		}
@@ -333,19 +403,45 @@ public class ExamenDAOImpl implements ExamenDAO {
 		if(preguntaInfoVo.getImagenRespuestaI() == null) {
 			preguntaInfoVo.setImagenRespuestaI(ConstantesTester.CONST_GUION);
 		}
-		if(preguntaInfoVo.getExplicacion() == null) {
-			preguntaInfoVo.setExplicacion(ConstantesTester.CONST_GUION);
-		}		
-		if(preguntaInfoVo.getImagenExplicacion() == null) {
-			preguntaInfoVo.setImagenExplicacion(ConstantesTester.CONST_GUION);
+	}
+
+	private void asignarRespuestasVacias(PreguntaInfoVo preguntaInfoVo) {
+		if(preguntaInfoVo.getRespuestaC() == null) {
+			preguntaInfoVo.setRespuestaC(ConstantesTester.CONST_GUION);
 		}
-		if(preguntaInfoVo.getNombreMateria() == null) {
-			preguntaInfoVo.setNombreMateria(ConstantesTester.CONST_GUION);
+		if(preguntaInfoVo.getRespuestaC() == null) {
+			preguntaInfoVo.setRespuestaC(ConstantesTester.CONST_GUION);
 		}
-		if(preguntaInfoVo.getUnidad() == null) {
-			preguntaInfoVo.setUnidad(ConstantesTester.CONST_GUION);
+		if(preguntaInfoVo.getRespuestaD() == null) {
+			preguntaInfoVo.setRespuestaD(ConstantesTester.CONST_GUION);
+		}
+		if(preguntaInfoVo.getRespuestaE() == null) {
+			preguntaInfoVo.setRespuestaE(ConstantesTester.CONST_GUION);
+		}
+		if(preguntaInfoVo.getRespuestaF() == null) {
+			preguntaInfoVo.setRespuestaF(ConstantesTester.CONST_GUION);
+		}
+		if(preguntaInfoVo.getRespuestaG() == null) {
+			preguntaInfoVo.setRespuestaG(ConstantesTester.CONST_GUION);
+		}
+		if(preguntaInfoVo.getRespuestaH() == null) {
+			preguntaInfoVo.setRespuestaH(ConstantesTester.CONST_GUION);
+		}
+		if(preguntaInfoVo.getRespuestaI() == null) {
+			preguntaInfoVo.setRespuestaI(ConstantesTester.CONST_GUION);
 		}
 	}
 
-
+	private String asignarLetraInicial(String respuesta,String letra) {
+		StringBuilder combinacionInicial = new StringBuilder();
+		combinacionInicial.append(letra);
+		combinacionInicial.append(".-");
+		
+		if(!respuesta.contains(combinacionInicial.toString())) {
+			combinacionInicial.append(" ");
+			combinacionInicial.append(respuesta);
+			return combinacionInicial.toString();
+		}
+		return respuesta;
+	}
 }

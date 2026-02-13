@@ -41,11 +41,15 @@ public class ExamenController {
         return bi.getSubtemas(idTema);
     }
     
-    /*Corregir mas adelante*/
-//    @GetMapping("/topico/{idSubtemaTopico}")
-//    public Map<Integer,String> getTopicos(@PathVariable("idSubtemaTopico")Long idTopico) {
-//        return bi.getSubtemas(idTopico);
-//    }
+    @GetMapping("/topico/{idSubtema}")
+    public Map<Integer,String> getTopicos(@PathVariable("idSubtema")Long idTopico) {
+        return bi.getTopicos(idTopico);
+    }
+    
+    @GetMapping("/pregunta/subtemaTopico/{idSubtemaTopico}")
+    public PreguntaInfoVo getPreguntaXSubtemaTopico(@PathVariable("idSubtemaTopico")Long idSubtemaTopico) {
+        return bi.getPreguntaXSubtemaTopico(idSubtemaTopico);
+    }
     
     
     @GetMapping("/preguntas/allpreguntas")
