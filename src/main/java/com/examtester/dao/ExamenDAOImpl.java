@@ -268,91 +268,97 @@ public class ExamenDAOImpl implements ExamenDAO {
 	@Override
 	public GenericResponse insertarPregunta(Pregunta pregunta) {
 
-	    GenericResponse response = new GenericResponse();
-	    
-        	StringBuilder sql = new StringBuilder();
-        	sql.append("INSERT INTO PREGUNTAS (");
-        	sql.append("ID_PREGUNTA, ID_SUBTEMA_TOPICO, ID_ORIGEN, ");
-        	sql.append("RESPUESTA_CORRECTA, PREGUNTA, RESPUESTA_A, RESPUESTA_B");
+		GenericResponse response = new GenericResponse();
 
-        	asignaQueryOpcionales(sql,pregunta);
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO PREGUNTAS (");
+		sql.append("ID_PREGUNTA, ID_SUBTEMA_TOPICO, ID_ORIGEN, ");
+		sql.append("RESPUESTA_CORRECTA, PREGUNTA, RESPUESTA_A, RESPUESTA_B");
 
-        	sql.append(") VALUES (?,?,?,?,?,?,?");
+		asignaQueryOpcionales(sql,pregunta);
 
-        	if (pregunta.getRespuestaC() != null) sql.append(",?");
-        	if (pregunta.getRespuestaD() != null) sql.append(",?");
-        	if (pregunta.getRespuestaE() != null) sql.append(",?");
-        	if (pregunta.getRespuestaF() != null) sql.append(",?");
-        	if (pregunta.getRespuestaG() != null) sql.append(",?");
-        	if (pregunta.getRespuestaH() != null) sql.append(",?");
-        	if (pregunta.getRespuestaI() != null) sql.append(",?");
-        	if (pregunta.getIdMateria() != null) sql.append(",?");
-        	if (pregunta.getUnidad() != null) sql.append(",?");
+		sql.append(") VALUES (?,?,?,?,?,?,?");
 
-        	sql.append(")");
+		if (pregunta.getRespuestaC() != null && pregunta.getRespuestaC() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getRespuestaD() != null && pregunta.getRespuestaD() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getRespuestaE() != null && pregunta.getRespuestaE() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getRespuestaF() != null && pregunta.getRespuestaF() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getRespuestaG() != null && pregunta.getRespuestaG() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getRespuestaH() != null && pregunta.getRespuestaH() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getRespuestaI() != null && pregunta.getRespuestaI() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getIdMateria() != null && pregunta.getIdMateria().toString() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
+		if (pregunta.getUnidad() != null && pregunta.getUnidad() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
 
-        	try (Connection con = dataSource.getConnection();
-        			PreparedStatement ps = con.prepareStatement(sql.toString())) {
+		sql.append(")");
 
-        		Integer i = 1;
+		try (Connection con = dataSource.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql.toString())) {
 
-        		ps.setInt(i++, pregunta.getIdPregunta());
-        		ps.setInt(i++, pregunta.getIdSubtemaTopico());
-        		ps.setInt(i++, pregunta.getIdOrigen());
-        		ps.setString(i++, pregunta.getRespuestaCorrecta());
-        		ps.setString(i++, pregunta.getPregunta());
-        		ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaA(),"A"));
-        		ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaB(),"B"));
+			Integer i = 1;
 
-        		i = asignaQueryValoresOpcionales(ps, i, pregunta);
+			ps.setInt(i++, pregunta.getIdPregunta());
+			ps.setInt(i++, pregunta.getIdSubtemaTopico());
+			ps.setInt(i++, pregunta.getIdOrigen());
+			ps.setString(i++, pregunta.getRespuestaCorrecta());
+			ps.setString(i++, pregunta.getPregunta());
+			ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaA(),"A"));
+			ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaB(),"B"));
 
-        		ps.executeUpdate();
+			i = asignaQueryValoresOpcionales(ps, i, pregunta);
 
-        		response.setCodigo(0);
-        		response.setMensaje("Pregunta insertada correctamente");
+			ps.executeUpdate();
 
-        	} catch (Exception e) {
-        		e.printStackTrace();
-        		response.setCodigo(1);
-        		response.setMensaje("Error al insertar pregunta");
-        	}
-	    return response;
+			response.setCodigo(0);
+			response.setMensaje("Pregunta insertada correctamente");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setCodigo(1);
+			response.setMensaje("Error al insertar pregunta");
+		}
+		return response;
 	}
-
 
 	
 	private void asignaQueryOpcionales(StringBuilder sql, Pregunta pregunta) {
-	    if (pregunta.getRespuestaC() != null) sql.append(", RESPUESTA_C");
-	    if (pregunta.getRespuestaD() != null) sql.append(", RESPUESTA_D");
-	    if (pregunta.getRespuestaE() != null) sql.append(", RESPUESTA_E");
-	    if (pregunta.getRespuestaF() != null) sql.append(", RESPUESTA_F");
-	    if (pregunta.getRespuestaG() != null) sql.append(", RESPUESTA_G");
-	    if (pregunta.getRespuestaH() != null) sql.append(", RESPUESTA_H");
-	    if (pregunta.getRespuestaI() != null) sql.append(", RESPUESTA_I");
-	    if (pregunta.getIdMateria() != null) sql.append(", ID_MATERIA");
-	    if (pregunta.getUnidad() != null) sql.append(", UNIDAD");
+	    if (pregunta.getRespuestaC() != null && pregunta.getRespuestaC() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_C");
+	    if (pregunta.getRespuestaD() != null && pregunta.getRespuestaD() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_D");
+	    if (pregunta.getRespuestaE() != null && pregunta.getRespuestaE() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_E");
+	    if (pregunta.getRespuestaF() != null && pregunta.getRespuestaF() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_F");
+	    if (pregunta.getRespuestaG() != null && pregunta.getRespuestaG() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_G");
+	    if (pregunta.getRespuestaH() != null && pregunta.getRespuestaH() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_H");
+	    if (pregunta.getRespuestaI() != null && pregunta.getRespuestaI() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_I");
+	    if (pregunta.getIdMateria() != null && pregunta.getIdMateria().toString() != ConstantesTester.CONST_STRING_VACIO) sql.append(", ID_MATERIA");
+	    if (pregunta.getUnidad() != null && pregunta.getUnidad() != ConstantesTester.CONST_STRING_VACIO) sql.append(", UNIDAD");
 	}
-
+	/**
+	 * Método que asigna los valores opcionales a la query
+	 * @param ps PreparedStatement que contiene la query formada hasta el momento
+	 * @param i posición en la que sera insertado el valor
+	 * @param pregunta Objeto de tipo Pregunta que contiene los valores que seran insertados en la tabla
+	 * @return i la ultima posicion que tiene el iterador
+	 * @author Alejandro Saul Baños
+	 * */
 	private int asignaQueryValoresOpcionales(PreparedStatement ps, Integer i, Pregunta pregunta) throws Exception {
 		try {
-		       if (pregunta.getRespuestaC() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaC(),"C"));
-		        if (pregunta.getRespuestaD() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaD(),"D") );
-		        if (pregunta.getRespuestaE() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaE(),"E") );
-		        if (pregunta.getRespuestaF() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaF(),"F"));
-		        if (pregunta.getRespuestaG() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaG(),"G"));
-		        if (pregunta.getRespuestaH() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaH(),"H"));
-		        if (pregunta.getRespuestaI() != null) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaI(),"I"));
-		        if (pregunta.getIdMateria() != null) ps.setInt(i++, pregunta.getIdMateria());
-		        if (pregunta.getUnidad() != null) ps.setString(i++, pregunta.getUnidad());
+			if (pregunta.getRespuestaC() != null && pregunta.getRespuestaC() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaC(),"C"));
+			if (pregunta.getRespuestaD() != null && pregunta.getRespuestaD() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaD(),"D") );
+			if (pregunta.getRespuestaE() != null && pregunta.getRespuestaE() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaE(),"E") );
+			if (pregunta.getRespuestaF() != null && pregunta.getRespuestaF() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaF(),"F"));
+			if (pregunta.getRespuestaG() != null && pregunta.getRespuestaG() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaG(),"G"));
+			if (pregunta.getRespuestaH() != null && pregunta.getRespuestaH() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaH(),"H"));
+			if (pregunta.getRespuestaI() != null && pregunta.getRespuestaI() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaI(),"I"));
+			if (pregunta.getIdMateria() != null && pregunta.getIdMateria().toString() != ConstantesTester.CONST_STRING_VACIO) ps.setInt(i++, pregunta.getIdMateria());
+			if (pregunta.getUnidad() != null && pregunta.getUnidad() != ConstantesTester.CONST_STRING_VACIO) ps.setString(i++, pregunta.getUnidad());
 		} catch (Exception e) {
-	        e.printStackTrace();
-	        throw e;
+			e.printStackTrace();
+			throw e;
 		}
 		return i;
 	}
 
 	/**
-	 * Método que asigna un guion de los datos vacios no obligatorias de una pregunta
+	 * Método que asigna un guion de los datos vacios no obligatorias de una pregunta al obtenerla
 	 * @param preguntaInfoVo value object que guarda la información traida de la entidad
 	 * @author Alejandro Saul Baños Vega
 	 * */
@@ -437,7 +443,7 @@ public class ExamenDAOImpl implements ExamenDAO {
 		combinacionInicial.append(letra);
 		combinacionInicial.append(".-");
 		
-		if(!respuesta.contains(combinacionInicial.toString())) {
+		if(respuesta != null && !respuesta.contains(combinacionInicial.toString()) && respuesta != ConstantesTester.CONST_STRING_VACIO) {
 			combinacionInicial.append(" ");
 			combinacionInicial.append(respuesta);
 			return combinacionInicial.toString();

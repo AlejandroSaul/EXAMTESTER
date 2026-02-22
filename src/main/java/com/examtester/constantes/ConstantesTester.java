@@ -36,4 +36,5 @@ public class ConstantesTester {
 	public static final String CONST_NOMBRE_MATERIA = "NOMBRE_MATERIA";
 	public static final String CONST_UNIDAD = "UNIDAD";
 	public static final String CONST_GUION = "-";
+	public static final String CONST_STRING_VACIO = "";
 }

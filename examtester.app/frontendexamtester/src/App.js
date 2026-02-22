@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import InsertarPregunta from "./Preguntas/InsertarPregunta";
+import InsercionMasiva from "./Preguntas/InsercionMasiva";
 import Navegacion from "./Preguntas/Navegacion";
 import Test from "./Preguntas/Test";
 
@@ -11,7 +12,8 @@ function App() {
         <h3>Exam Tester</h3>
         <Navegacion />
         <Routes>
-          <Route path="/agregar-pregunta"  element={<InsertarPregunta />} />
+          <Route path="/agregar-pregunta"  element={<InsertarPregunta  />} />
+          <Route path="/insercion-masiva"  element={<InsercionMasiva/>} />
           <Route path="/ir-a-test"  element={<Test />} />
         </Routes>
       </div>

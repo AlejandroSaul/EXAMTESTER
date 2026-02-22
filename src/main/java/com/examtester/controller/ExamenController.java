@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.examtester.business.Bi;
 import com.examtester.entidad.PreguntaInfoVo;
 import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
-
-@CrossOrigin (value = "http://localhost:3000")
+@CrossOrigin (value = "http://192.168.0.71:3000")
 @RestController
 @RequestMapping("/api/examen")
 public class ExamenController {
@@ -68,5 +69,9 @@ public class ExamenController {
     	return bi.insertarPregunta(pregunta);
     }
     
+    @PostMapping("/importar-excel")
+    public GenericResponse importarExcel(@RequestParam("file") MultipartFile file) {
+            return bi.procesarExcelPreguntas(file);
+    }
 
 }

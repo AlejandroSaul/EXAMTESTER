@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
 import com.examtester.entidad.PreguntaInfoVo;
@@ -17,7 +19,6 @@ public interface Bi {
 	public Map<Integer,String> getTopicos(Long idSubtema);
 	
 	public PreguntaInfoVo getPreguntaXSubtemaTopico(Long idSubtemaTopico);
-
 	
 	public List<String> getRespuestasPosibles(Pregunta pregunta);
 	
@@ -32,5 +33,7 @@ public interface Bi {
 	public PreguntaInfoVo getPregunta(Long id);
 	
 	public GenericResponse insertarPregunta(Pregunta pregunta);
+	
+	public GenericResponse procesarExcelPreguntas(MultipartFile file); 
 	
 }
