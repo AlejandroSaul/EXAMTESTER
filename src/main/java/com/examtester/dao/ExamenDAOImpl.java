@@ -39,7 +39,7 @@ public class ExamenDAOImpl implements ExamenDAO {
 			ps = con.prepareStatement(sql);
 			rs = ps.executeQuery();	
 			if(ps != null) {
-				while(rs.next()) {									
+				while(rs.next()) {
 					int idTema = rs.getInt("ID_TEMA");
 					String tema = rs.getString("NOMBRE_TEMA");
 					resultado.put(idTema, tema);
@@ -72,7 +72,7 @@ public class ExamenDAOImpl implements ExamenDAO {
 			ps.setLong(1, idTema);
 			rs = ps.executeQuery();	
 			if(ps != null) {
-				while(rs.next()) {									
+				while(rs.next()) {
 					Integer idSubTema = rs.getInt("ID_SUBTEMA");
 					String subTema = rs.getString("NOMBRE_SUBTEMA");
 					resultado.put(idSubTema, subTema);
@@ -157,128 +157,65 @@ public class ExamenDAOImpl implements ExamenDAO {
 		return arregloPreguntas;
 	}
 	
-	
-
-
-	
 	@SuppressWarnings("unused")
 	@Override
 	public PreguntaInfoVo getPregunta(Long id) {
-
-	    String sql = QuerysTester.QUERY_GET_PREGUNTA;
-	    PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
-
-	    try (Connection con = dataSource.getConnection();
-	         PreparedStatement ps = con.prepareStatement(sql)) {
-
-	        ps.setLong(1, id);
-
-	        try (ResultSet rs = ps.executeQuery()) {
-
-	            if (rs.next()) {
-	                preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
-	                preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
-	                preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));
-	                preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));
-	                preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));
-	                preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
-	                preguntaInfoVo.setImagenRespuestaB(rs.getString(ConstantesTester.CONST_IMAGEN_B));
-	                preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
-	                preguntaInfoVo.setImagenRespuestaC(rs.getString(ConstantesTester.CONST_IMAGEN_C));
-	                preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
-	                preguntaInfoVo.setImagenRespuestaD(rs.getString(ConstantesTester.CONST_IMAGEN_D));
-	                preguntaInfoVo.setRespuestaE(rs.getString(ConstantesTester.CONST_RESPUESTA_E));
-	                preguntaInfoVo.setImagenRespuestaE(rs.getString(ConstantesTester.CONST_IMAGEN_E));
-	                preguntaInfoVo.setRespuestaF(rs.getString(ConstantesTester.CONST_RESPUESTA_F));
-	                preguntaInfoVo.setImagenRespuestaF(rs.getString(ConstantesTester.CONST_IMAGEN_F));
-	                preguntaInfoVo.setRespuestaG(rs.getString(ConstantesTester.CONST_RESPUESTA_G));
-	                preguntaInfoVo.setImagenRespuestaG(rs.getString(ConstantesTester.CONST_IMAGEN_G));
-	                preguntaInfoVo.setRespuestaH(rs.getString(ConstantesTester.CONST_RESPUESTA_H));
-	                preguntaInfoVo.setImagenRespuestaH(rs.getString(ConstantesTester.CONST_IMAGEN_H));
-	                preguntaInfoVo.setRespuestaI(rs.getString(ConstantesTester.CONST_RESPUESTA_I));
-	                preguntaInfoVo.setImagenRespuestaI(rs.getString(ConstantesTester.CONST_IMAGEN_I));
-	                preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
-	                preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
-	                preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
-	                preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
-	                preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
-	                preguntaInfoVo.setExplicacion(rs.getString(ConstantesTester.CONST_EXPLICACION));
-	                preguntaInfoVo.setImagenExplicacion(rs.getString(ConstantesTester.CONST_IMAGEN_EXPLICACION));
-	            }
-	        }
-
-	        asiganVacios(preguntaInfoVo);
-
-	    } catch (Exception e) {
-	        System.err.println("Error al consultar pregunta: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-
-	    return preguntaInfoVo;
-	}
-	
-
-	@Override
-	public List<PreguntaInfoVo> getAllPreguntas() {
-		String sql = QuerysTester.QUERY_GET_ALL_PREGUNTAS;
+		
+		String sql = QuerysTester.QUERY_GET_PREGUNTA;
 		PreguntaInfoVo preguntaInfoVo = new PreguntaInfoVo();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Connection con = null;
-		List<PreguntaInfoVo> preguntasInfoVo = new ArrayList();
-		try {
-			con = dataSource.getConnection();
-			ps = con.prepareStatement(sql);
-			if(ps != null) {
-				rs = ps.executeQuery();
-				while(rs.next()) {
+		
+		try (Connection con = dataSource.getConnection();
+				PreparedStatement ps = con.prepareStatement(sql)) {
+			
+			ps.setLong(1, id);
+			
+			try (ResultSet rs = ps.executeQuery()) {
+				
+				if (rs.next()) {
 					preguntaInfoVo.setIdPregunta(rs.getString(ConstantesTester.CONST_ID_PREGUNTA));
 					preguntaInfoVo.setPregunta(rs.getString(ConstantesTester.CONST_PREGUNTA));
-					preguntaInfoVo.setImagenPregunta(rs.getString(ConstantesTester.CONST_IMAGEN_P));					
-					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));					
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_A));					
+					preguntaInfoVo.setRespuestaA(rs.getString(ConstantesTester.CONST_RESPUESTA_A));
 					preguntaInfoVo.setRespuestaB(rs.getString(ConstantesTester.CONST_RESPUESTA_B));
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_B));					
 					preguntaInfoVo.setRespuestaC(rs.getString(ConstantesTester.CONST_RESPUESTA_C));
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_C));					
 					preguntaInfoVo.setRespuestaD(rs.getString(ConstantesTester.CONST_RESPUESTA_D));
-					preguntaInfoVo.setImagenRespuestaA(rs.getString(ConstantesTester.CONST_IMAGEN_D));					
+					preguntaInfoVo.setRespuestaE(rs.getString(ConstantesTester.CONST_RESPUESTA_E));
+					preguntaInfoVo.setRespuestaF(rs.getString(ConstantesTester.CONST_RESPUESTA_F));
+					preguntaInfoVo.setRespuestaG(rs.getString(ConstantesTester.CONST_RESPUESTA_G));
+					preguntaInfoVo.setRespuestaH(rs.getString(ConstantesTester.CONST_RESPUESTA_H));
+					preguntaInfoVo.setRespuestaI(rs.getString(ConstantesTester.CONST_RESPUESTA_I));
 					preguntaInfoVo.setRespuestaCorrecta(rs.getString(ConstantesTester.CONST_RESPUESTA_CORRECTA));
 					preguntaInfoVo.setOrigen(rs.getString(ConstantesTester.CONST_ORIGEN));
 					preguntaInfoVo.setNombreSubtema(rs.getString(ConstantesTester.CONST_NOMBRE_SUBTEMA));
 					preguntaInfoVo.setNombreTema(rs.getString(ConstantesTester.CONST_NOMBRE_TEMA));
 					preguntaInfoVo.setNombreTopico(rs.getString(ConstantesTester.CONST_NOMBRE_TOPICO));
-					preguntasInfoVo.add(preguntaInfoVo);
+					preguntaInfoVo.setExplicacion(rs.getString(ConstantesTester.CONST_EXPLICACION));
 				}
 			}
+			
+			asiganVacios(preguntaInfoVo);
+			
 		} catch (Exception e) {
-			System.out.println("Error al obtener el PreparedStatement" + e);
-		} finally {
-			try {
-				rs.close();
-				ps.close();
-				con.close();
-			} catch (Exception e) {
-				System.out.println("Error al cerrar las conexiones"+e);
-			}
+			System.err.println("Error al consultar pregunta: " + e.getMessage());
+			e.printStackTrace();
 		}
-		return preguntasInfoVo;
+		
+		return preguntaInfoVo;
 	}
 	
 	@Override
 	public GenericResponse insertarPregunta(Pregunta pregunta) {
-
+		
 		GenericResponse response = new GenericResponse();
-
+		
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO PREGUNTAS (");
 		sql.append("ID_PREGUNTA, ID_SUBTEMA_TOPICO, ID_ORIGEN, ");
 		sql.append("RESPUESTA_CORRECTA, PREGUNTA, RESPUESTA_A, RESPUESTA_B");
-
+		
 		asignaQueryOpcionales(sql,pregunta);
-
+		
 		sql.append(") VALUES (?,?,?,?,?,?,?");
-
+		
 		if (pregunta.getRespuestaC() != null && pregunta.getRespuestaC() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
 		if (pregunta.getRespuestaD() != null && pregunta.getRespuestaD() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
 		if (pregunta.getRespuestaE() != null && pregunta.getRespuestaE() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
@@ -288,14 +225,14 @@ public class ExamenDAOImpl implements ExamenDAO {
 		if (pregunta.getRespuestaI() != null && pregunta.getRespuestaI() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
 		if (pregunta.getIdMateria() != null && pregunta.getIdMateria().toString() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
 		if (pregunta.getUnidad() != null && pregunta.getUnidad() != ConstantesTester.CONST_STRING_VACIO) sql.append(",?");
-
+		
 		sql.append(")");
-
+		
 		try (Connection con = dataSource.getConnection();
 				PreparedStatement ps = con.prepareStatement(sql.toString())) {
-
+			
 			Integer i = 1;
-
+			
 			ps.setInt(i++, pregunta.getIdPregunta());
 			ps.setInt(i++, pregunta.getIdSubtemaTopico());
 			ps.setInt(i++, pregunta.getIdOrigen());
@@ -303,14 +240,14 @@ public class ExamenDAOImpl implements ExamenDAO {
 			ps.setString(i++, pregunta.getPregunta());
 			ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaA(),"A"));
 			ps.setString(i++, asignarLetraInicial(pregunta.getRespuestaB(),"B"));
-
+			
 			i = asignaQueryValoresOpcionales(ps, i, pregunta);
-
+			
 			ps.executeUpdate();
-
+			
 			response.setCodigo(0);
 			response.setMensaje("Pregunta insertada correctamente");
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setCodigo(1);
@@ -318,8 +255,13 @@ public class ExamenDAOImpl implements ExamenDAO {
 		}
 		return response;
 	}
-
 	
+	/**
+	 * Método que asigna las columnas opcionales a la query
+	 * @param sql StringBuilder cadena de texto que será usada en el insert
+	 * @param pregunta Objeto de tipo Pregunta que contiene los valores que seran insertados en la tabla
+	 * @author Alejandro Saul Baños
+	 * */
 	private void asignaQueryOpcionales(StringBuilder sql, Pregunta pregunta) {
 	    if (pregunta.getRespuestaC() != null && pregunta.getRespuestaC() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_C");
 	    if (pregunta.getRespuestaD() != null && pregunta.getRespuestaD() != ConstantesTester.CONST_STRING_VACIO) sql.append(", RESPUESTA_D");
@@ -331,6 +273,7 @@ public class ExamenDAOImpl implements ExamenDAO {
 	    if (pregunta.getIdMateria() != null && pregunta.getIdMateria().toString() != ConstantesTester.CONST_STRING_VACIO) sql.append(", ID_MATERIA");
 	    if (pregunta.getUnidad() != null && pregunta.getUnidad() != ConstantesTester.CONST_STRING_VACIO) sql.append(", UNIDAD");
 	}
+	
 	/**
 	 * Método que asigna los valores opcionales a la query
 	 * @param ps PreparedStatement que contiene la query formada hasta el momento
@@ -358,21 +301,16 @@ public class ExamenDAOImpl implements ExamenDAO {
 	}
 
 	/**
-	 * Método que asigna un guion de los datos vacios no obligatorias de una pregunta al obtenerla
+	 * Método que asigna un guíon de los datos vacios no obligatorias de una pregunta al obtenerla
 	 * @param preguntaInfoVo value object que guarda la información traida de la entidad
-	 * @author Alejandro Saul Baños Vega
+	 * @author Alejandro Saul Baños
 	 * */
 	private void asiganVacios(PreguntaInfoVo preguntaInfoVo) {
 		asignarRespuestasVacias(preguntaInfoVo);
 		
-		asignarImagenesVacias(preguntaInfoVo);
-		
 		if(preguntaInfoVo.getExplicacion() == null) {
 			preguntaInfoVo.setExplicacion(ConstantesTester.CONST_GUION);
 		}		
-		if(preguntaInfoVo.getImagenExplicacion() == null) {
-			preguntaInfoVo.setImagenExplicacion(ConstantesTester.CONST_GUION);
-		}
 		if(preguntaInfoVo.getNombreMateria() == null) {
 			preguntaInfoVo.setNombreMateria(ConstantesTester.CONST_GUION);
 		}
@@ -380,37 +318,12 @@ public class ExamenDAOImpl implements ExamenDAO {
 			preguntaInfoVo.setUnidad(ConstantesTester.CONST_GUION);
 		}
 	}
-
-	private void asignarImagenesVacias(PreguntaInfoVo preguntaInfoVo) {
-		if(preguntaInfoVo.getImagenRespuestaA() == null) {
-			preguntaInfoVo.setImagenRespuestaA(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaB() == null) {
-			preguntaInfoVo.setImagenRespuestaB(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaC() == null) {
-			preguntaInfoVo.setImagenRespuestaC(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaD() == null) {
-			preguntaInfoVo.setImagenRespuestaD(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaE() == null) {
-			preguntaInfoVo.setImagenRespuestaE(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaF() == null) {
-			preguntaInfoVo.setImagenRespuestaF(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaG() == null) {
-			preguntaInfoVo.setImagenRespuestaG(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaH() == null) {
-			preguntaInfoVo.setImagenRespuestaH(ConstantesTester.CONST_GUION);
-		}
-		if(preguntaInfoVo.getImagenRespuestaI() == null) {
-			preguntaInfoVo.setImagenRespuestaI(ConstantesTester.CONST_GUION);
-		}
-	}
-
+	
+	/**
+	 * Método que asigna un guíon de las preguntas vacias no obligatorias de una pregunta al obtenerla
+	 * @param preguntaInfoVo value object que guarda la información traida de la entidad
+	 * @author Alejandro Saul Baños
+	 * */
 	private void asignarRespuestasVacias(PreguntaInfoVo preguntaInfoVo) {
 		if(preguntaInfoVo.getRespuestaC() == null) {
 			preguntaInfoVo.setRespuestaC(ConstantesTester.CONST_GUION);
@@ -437,7 +350,13 @@ public class ExamenDAOImpl implements ExamenDAO {
 			preguntaInfoVo.setRespuestaI(ConstantesTester.CONST_GUION);
 		}
 	}
-
+	
+	/**
+	 * Método que asigna la letra incial a una pregunta si esta no ha sido asignada
+	 * @param respuesta String con la respuesta que será evaluada, y se le colocara letra inicial si esta no la tiene
+	 * @param letra que sería asignada a la respuesta
+	 * @author Alejandro Saul Baños
+	 * */
 	private String asignarLetraInicial(String respuesta,String letra) {
 		StringBuilder combinacionInicial = new StringBuilder();
 		combinacionInicial.append(letra);

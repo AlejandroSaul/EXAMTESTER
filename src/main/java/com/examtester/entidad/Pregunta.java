@@ -7,7 +7,6 @@ public class Pregunta {
 	private Integer idSubtemaTopico;
 	private Integer idOrigen;
 	private String pregunta;
-	private String imagenPreguntaPregunta;
 	private String rutaArchivo;
 	private String respuestaA;
 	private String respuestaB;
@@ -26,7 +25,7 @@ public class Pregunta {
 
 
 
-	public Pregunta(Integer idPregunta, Integer idSubtemaTopico, Integer idOrigen, String pregunta, String imagenPregunta,
+	public Pregunta(Integer idPregunta, Integer idSubtemaTopico, Integer idOrigen, String pregunta,
 			String rutaArchivo, String respuestaA, String respuestaB, String respuestaC, String respuestaD,
 			String respuestaE, String respuestaF, String respuestaG, String respuestaH, String respuestaI,
 			String respuestaCorrecta, Integer idMateria, String explicacion, String unidad) {
@@ -35,7 +34,6 @@ public class Pregunta {
 		this.idSubtemaTopico = idSubtemaTopico;
 		this.idOrigen = idOrigen;
 		this.pregunta = pregunta;
-		this.imagenPreguntaPregunta = imagenPregunta;
 		this.rutaArchivo = rutaArchivo;
 		this.respuestaA = respuestaA;
 		this.respuestaB = respuestaB;
@@ -86,14 +84,6 @@ public class Pregunta {
 
 	public void setPregunta(String pregunta) {
 		this.pregunta = pregunta;
-	}
-
-	public String getImagenPregunta() {
-		return imagenPreguntaPregunta;
-	}
-
-	public void setImagenPregunta(String imagenPregunta) {
-		this.imagenPreguntaPregunta = imagenPregunta;
 	}
 
 	public String getRutaArchivo() {
@@ -213,7 +203,7 @@ public class Pregunta {
 	@Override
 	public String toString() {
 		return "Pregunta [idPregunta=" + idPregunta + ", idSubtemaTopico=" + idSubtemaTopico + ", idOrigen=" + idOrigen
-				+ ", pregunta=" + pregunta + ", imagen=" + imagenPreguntaPregunta + ", rutaArchivo=" + rutaArchivo + ", respuestaA="
+				+ ", pregunta=" + pregunta + ", rutaArchivo=" + rutaArchivo + ", respuestaA="
 				+ respuestaA + ", respuestaB=" + respuestaB + ", respuestaC=" + respuestaC + ", respuestaD="
 				+ respuestaD + ", respuestaE=" + respuestaE + ", respuestaF=" + respuestaF + ", respuestaG="
 				+ respuestaG + ", respuestaH=" + respuestaH + ", respuestaI=" + respuestaI + ", respuestaCorrecta="
@@ -223,7 +213,7 @@ public class Pregunta {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(explicacion, idOrigen, idPregunta, idSubtemaTopico, imagenPreguntaPregunta, pregunta, respuestaA,
+		return Objects.hash(explicacion, idOrigen, idPregunta, idSubtemaTopico, pregunta, respuestaA,
 				respuestaB, respuestaC, respuestaCorrecta, respuestaD, rutaArchivo);
 	}
 
@@ -238,7 +228,7 @@ public class Pregunta {
 		Pregunta other = (Pregunta) obj;
 		return Objects.equals(explicacion, other.explicacion) && Objects.equals(idOrigen, other.idOrigen)
 				&& Objects.equals(idPregunta, other.idPregunta)
-				&& Objects.equals(idSubtemaTopico, other.idSubtemaTopico) && Objects.equals(imagenPreguntaPregunta, other.imagenPreguntaPregunta)
+				&& Objects.equals(idSubtemaTopico, other.idSubtemaTopico)
 				&& Objects.equals(pregunta, other.pregunta) && Objects.equals(respuestaA, other.respuestaA)
 				&& Objects.equals(respuestaB, other.respuestaB) && Objects.equals(respuestaC, other.respuestaC)
 				&& Objects.equals(respuestaCorrecta, other.respuestaCorrecta)

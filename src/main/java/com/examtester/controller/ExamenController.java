@@ -19,7 +19,8 @@ import com.examtester.business.Bi;
 import com.examtester.entidad.PreguntaInfoVo;
 import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
-@CrossOrigin (value = "http://192.168.0.71:3000")
+
+@CrossOrigin (origins = "${app.cors.allowed-origins}")
 @RestController
 @RequestMapping("/api/examen")
 public class ExamenController {
@@ -31,44 +32,61 @@ public class ExamenController {
     }
     
     public static final Logger log = LoggerFactory.getLogger(ExamenController.class);
-    //http://localhost:8081/api/examen/temas
+    
+    /**
+     * Método que obtiene todos los temas existentes en BD
+     * URL = http://localhost:8081/api/examen/temas
+     * @return Mapa con el id y el nombre del tema del cual se desea obtener la información
+     * @author Alejandro Saúl Baños
+     * */
     @GetMapping("/temas")
     public Map<Integer,String> getTemas() {
         return bi.getTemas();
     }
-  //http://localhost:8081/api/examen/subtemas/{idTema}
+    
+    /**
+     * Método que obtiene todos los subtemas existentes dentro de un tema en BD
+     * URL = http://localhost:8081/api/examen/subtemas/{idTema}
+     * @param id del tema del cual se desea obtener la información
+     * @return Mapa con el id y el nombre del subtema
+     * @author Alejandro Saúl Baños
+     * */
     @GetMapping("/subtemas/{idTema}")
     public Map<Integer,String> getSubtemas(@PathVariable("idTema")Long idTema) {
         return bi.getSubtemas(idTema);
     }
     
+    /**
+     * Método que obtiene todos los topicos existentes dentro de un subtema en BD
+     * URL = http://localhost:8081/api/examen/topico/{idSubtema}
+     * @param id del idSubtema del cual se desea obtener la información
+     * @return Mapa con el id y el nombre del subtema
+     * @author Alejandro Saúl Baños
+     * */
     @GetMapping("/topico/{idSubtema}")
-    public Map<Integer,String> getTopicos(@PathVariable("idSubtema")Long idTopico) {
-        return bi.getTopicos(idTopico);
+    public Map<Integer,String> getTopicos(@PathVariable("idSubtema")Long idSubtema) {
+        return bi.getTopicos(idSubtema);
     }
     
+    /**
+     * Método que obtiene una pregunta aleatoria de BD que tenga el idSubtemaTopico indicado
+     * URL = http://localhost:8081/api/examen/pregunta/subtemaTopico/{idSubtemaTopico}
+     * @param id del idSubtemaTopico del cual se desea obtener la información
+     * @return PreguntaInfoVo Objeto de valor con la información de la pregunta
+     * @author Alejandro Saúl Baños
+     * */
     @GetMapping("/pregunta/subtemaTopico/{idSubtemaTopico}")
     public PreguntaInfoVo getPreguntaXSubtemaTopico(@PathVariable("idSubtemaTopico")Long idSubtemaTopico) {
         return bi.getPreguntaXSubtemaTopico(idSubtemaTopico);
     }
     
-    
-    @GetMapping("/preguntas/allpreguntas")
-    public List<PreguntaInfoVo> getPreguntas() {
-        return bi.getAllPreguntas();
-    }
-    
-    @GetMapping("/pregunta/{id}")
-    public PreguntaInfoVo getPregunta(@PathVariable("id") Long id) {
-        return bi.getPregunta(id);
-    }
-    
-
-    @PostMapping(path = "insertar")
-    public GenericResponse insertPregunta(@RequestBody Pregunta pregunta) {
-    	return bi.insertarPregunta(pregunta);
-    }
-    
+    /**
+     * Método que inserta en BD todas las preguntas registradas en el archivo excel
+     * URL = http://localhost:8081/api/examen/importar-excel
+     * @param file objeto MultipartFile el cual debe ser llenado previamente antes de la carga
+     * @return GenericResponse Objeto con la respuesta generica para obtener información de la consulta
+     * @author Alejandro Saúl Baños
+     * */
     @PostMapping("/importar-excel")
     public GenericResponse importarExcel(@RequestParam("file") MultipartFile file) {
             return bi.procesarExcelPreguntas(file);
