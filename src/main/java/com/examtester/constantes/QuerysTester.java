@@ -7,6 +7,8 @@ public class QuerysTester {
 	public static final String QUERY_GET_SUBTEMAS = "SELECT * FROM SUBTEMA";
 	public static final String QUERY_GET_TOPICO = "SELECT * FROM TOPICO";
 	public static final String QUERY_GET_SUBTEMAS_ID = "SELECT * FROM SUBTEMA WHERE ID_TEMA = ?";
+	public static final String QUERY_INSERT_TEMA = "INSERT INTO TEMA (NOMBRE_TEMA) VALUES (?)";
+	public static final String QUERY_COUNT_TEMA_BY_NOMBRE = "SELECT COUNT(*) FROM TEMA WHERE NOMBRE_TEMA = ?";
 	public static final String QUERY_GET_TOPICOS = "SELECT sto.ID_SUBTEMA_TOPICO, NOMBRE_SUBTEMA, NOMBRE_TOPICO from subtema_topico sto "
 			+ "join subtema st on sto.ID_SUBTEMA = st.ID_SUBTEMA "
 			+ "join topico t on sto.ID_TOPICO = t.ID_TOPICO "

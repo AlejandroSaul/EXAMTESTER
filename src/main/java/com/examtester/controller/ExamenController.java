@@ -20,7 +20,7 @@ import com.examtester.entidad.PreguntaInfoVo;
 import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
 
-@CrossOrigin (origins = "${app.cors.allowed-origins}")
+@CrossOrigin (origins = "http://192.168.0.13:3000")
 @RestController
 @RequestMapping("/api/examen")
 public class ExamenController {
@@ -90,6 +90,11 @@ public class ExamenController {
     @PostMapping("/importar-excel")
     public GenericResponse importarExcel(@RequestParam("file") MultipartFile file) {
             return bi.procesarExcelPreguntas(file);
+    }
+
+    @PostMapping("/insertartema")
+    public GenericResponse insertarTema(@RequestBody Map<String, String> body) {
+        return bi.insertarTema(body.get("nombreTema"));
     }
 
 }

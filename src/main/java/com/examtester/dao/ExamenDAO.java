@@ -58,4 +58,8 @@ public interface ExamenDAO {
      * */
 	public GenericResponse insertarPregunta(Pregunta pregunta);
 
+	public GenericResponse insertarTema(String nombreTema);
+
+	public int existeTema(String nombreTema);
+
 }

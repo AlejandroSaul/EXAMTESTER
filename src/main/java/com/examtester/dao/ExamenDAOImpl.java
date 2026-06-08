@@ -300,6 +300,63 @@ public class ExamenDAOImpl implements ExamenDAO {
 		return i;
 	}
 
+	@Override
+	public int existeTema(String nombreTema) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_COUNT_TEMA_BY_NOMBRE;
+		int count = 0;
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, nombreTema);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			System.out.println("Error al verificar tema: " + e);
+		} finally {
+			try {
+				if (rs != null) rs.close();
+				if (ps != null) ps.close();
+				if (con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones" + e);
+			}
+		}
+		return count;
+	}
+
+	@Override
+	public GenericResponse insertarTema(String nombreTema) {
+		GenericResponse response = new GenericResponse();
+		PreparedStatement ps = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_INSERT_TEMA;
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, nombreTema);
+			ps.executeUpdate();
+			response.setCodigo(0);
+			response.setMensaje("Tema insertado correctamente");
+		} catch (Exception e) {
+			System.out.println("Error al insertar tema: " + e);
+			response.setCodigo(1);
+			response.setMensaje("Error al insertar tema: " + e.getMessage());
+		} finally {
+			try {
+				if (ps != null) ps.close();
+				if (con != null) con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones" + e);
+			}
+		}
+		return response;
+	}
+
 	/**
 	 * Método que asigna un guíon de los datos vacios no obligatorias de una pregunta al obtenerla
 	 * @param preguntaInfoVo value object que guarda la información traida de la entidad

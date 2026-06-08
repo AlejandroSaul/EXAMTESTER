@@ -26,7 +26,7 @@ export default function Navegacion() {
                         Agregar Contenedor Maestro
                     </a>
                     <ul className="dropdown-menu">
-                        <li><a className="dropdown-item" href="#">Agregar Tema</a></li>
+                        <li><Link className="dropdown-item" to="/agregar-tema">Agregar Tema</Link></li>
                         <li><a className="dropdown-item" href="#">Agregar Subtema</a></li>
                         <li><a className="dropdown-item" href="#">Agregar Topico</a></li>
                     </ul>
