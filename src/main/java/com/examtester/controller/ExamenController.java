@@ -20,7 +20,7 @@ import com.examtester.entidad.PreguntaInfoVo;
 import com.examtester.entidad.GenericResponse;
 import com.examtester.entidad.Pregunta;
 
-@CrossOrigin (origins = "${app.cors.allowed-origins}")
+@CrossOrigin(origins = "${app.cors.allowed-origins}")
 @RestController
 @RequestMapping("/api/examen")
 public class ExamenController {
