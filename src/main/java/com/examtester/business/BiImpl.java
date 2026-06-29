@@ -53,6 +53,29 @@ public class BiImpl implements Bi{
 	}
 
 	@Override
+	public GenericResponse insertarTema(String nombreTema) {
+		GenericResponse respuesta = new GenericResponse();
+		try {
+			if (nombreTema == null || nombreTema.trim().isEmpty()) {
+				respuesta.setCodigo(1);
+				respuesta.setMensaje("El nombre del tema no puede estar vacío");
+				return respuesta;
+			}
+			String nombreNormalizado = nombreTema.trim().toUpperCase();
+			if (examenDAO.existeTema(nombreNormalizado) > 0) {
+				respuesta.setCodigo(1);
+				respuesta.setMensaje("El tema ya existe");
+				return respuesta;
+			}
+			respuesta = examenDAO.insertarTema(nombreNormalizado);
+		} catch (Exception e) {
+			respuesta.setCodigo(1);
+			respuesta.setMensaje("Error al insertar tema: " + e.getMessage());
+		}
+		return respuesta;
+	}
+
+	@Override
 	public GenericResponse procesarExcelPreguntas(MultipartFile file) {
 		GenericResponse respuesta = new GenericResponse();
 		int filasInsertadas = 0;

@@ -48,4 +48,6 @@ public interface Bi {
      * */
 	public GenericResponse procesarExcelPreguntas(MultipartFile file);
 	
+	public GenericResponse insertarTema(String nombreTema);
+	
 }

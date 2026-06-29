@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import AgregarTema from "./Preguntas/AgregarTema";
 import InsercionMasiva from "./Preguntas/InsercionMasiva";
 import Navegacion from "./Preguntas/Navegacion";
 import Test from "./Preguntas/Test";
@@ -11,6 +12,7 @@ function App() {
         <h3>Exam Tester</h3>
         <Navegacion />
         <Routes>
+           <Route path="/agregar-tema"  element={<AgregarTema />} />
            <Route path="/insercion-masiva"  element={<InsercionMasiva />} />
           <Route path="/ir-a-test"  element={<Test />} />
         </Routes>

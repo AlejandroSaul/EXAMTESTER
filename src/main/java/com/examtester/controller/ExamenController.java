@@ -92,4 +92,9 @@ public class ExamenController {
             return bi.procesarExcelPreguntas(file);
     }
 
+    @PostMapping("/insertartema")
+    public GenericResponse insertarTema(@RequestBody Map<String, String> body) {
+        return bi.insertarTema(body.get("nombreTema"));
+    }
+
 }
