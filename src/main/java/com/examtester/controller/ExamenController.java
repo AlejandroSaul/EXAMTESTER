@@ -96,5 +96,10 @@ public class ExamenController {
     public GenericResponse insertarTema(@RequestBody Map<String, String> body) {
         return bi.insertarTema(body.get("nombreTema"));
     }
-
+    
+    @PostMapping("/insertarsubtema")
+    public GenericResponse insertarSubtema(@RequestBody Map<String, String> body) {
+        return bi.insertarTema(body.get("nombreTema"));
+    }
+    
 }

@@ -1,0 +1,1 @@
+REACT_APP_API_HOST=ec2-xx-xx-xx-xx.compute.amazonaws.com
