@@ -1,28 +1,28 @@
 import React, { useState } from 'react'
 
 export default function AgregarTema() {
-  const [nombreTema, setNombreTema] = useState('')
+  const [nombreSubTema, setNombreSubTema] = useState('')
   const [mensaje, setMensaje] = useState(null)
   const [tipo, setTipo] = useState('')
   const baseURL = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!nombreTema.trim()) {
+    if (!nombreSubTema.trim()) {
       setTipo('danger')
-      setMensaje('El nombre del tema no puede estar vacío')
+      setMensaje('El nombre del subtema no puede estar vacío')
       return
     }
     try {
-      const res = await fetch(`${baseURL}/api/examen/insertartema`, {
+      const res = await fetch(`${baseURL}/api/examen/insertarsubtema`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombreTema: nombreTema.trim() })
+        body: JSON.stringify({ nombreSubTema: nombreSubTema.trim() })
       })
       const data = await res.json()
       setTipo(data.codigo === 0 ? 'success' : 'danger')
       setMensaje(data.mensaje)
-      if (data.codigo === 0) setNombreTema('')
+      if (data.codigo === 0) setnombreSubTema('')
     } catch (error) {
       setTipo('danger')
       setMensaje('Error de conexión con el servidor')

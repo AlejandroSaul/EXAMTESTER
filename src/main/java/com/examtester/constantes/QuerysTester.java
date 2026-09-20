@@ -66,4 +66,12 @@ public class QuerysTester {
 		    + "JOIN TOPICO TOP ON TOP.ID_TOPICO = ST.ID_TOPICO "
 		    + "LEFT JOIN MATERIA M ON P.ID_MATERIA = M.ID_MATERIA "
 		    + "WHERE P.ID_PREGUNTA = ?;";
+
+	public static final String QUERY_FIND_USUARIO_BY_CORREO =
+		    "SELECT idUsuarios, Nombre, Password, Correo_electronico "
+		    + "FROM usuarios WHERE Correo_electronico = ?;";
+
+	public static final String QUERY_INSERT_USUARIO =
+		    "INSERT INTO usuarios (Nombre, Password, Correo_electronico) "
+		    + "VALUES (?, ?, ?);";
 }

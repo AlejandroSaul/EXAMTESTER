@@ -1,7 +1,16 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { isAuthenticated, getNombre, clearAuth } from "../api";
 
 export default function Navegacion() {
+  const navigate = useNavigate();
+  const autenticado = isAuthenticated();
+
+  const cerrarSesion = () => {
+    clearAuth();
+    navigate("/login");
+  };
+
   return (
     <div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary ">
@@ -9,37 +18,56 @@ export default function Navegacion() {
                 <Link className="navbar-brand"  to="/ir-a-test">
                     Ir a Test
                 </Link>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                {autenticado && (
+                  <>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
-                    <li className="nav-item">
-                        <Link className="nav-link"  to="/insercion-masiva">
-                        Insercion Masiva
-                        </Link>
-                    </li>
+                        <li className="nav-item">
+                            <Link className="nav-link"  to="/insercion-masiva">
+                            Insercion Masiva
+                            </Link>
+                        </li>
 
-                    <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Agregar Contenedor Maestro
-                    </a>
-                    <ul className="dropdown-menu">
-                        <li><Link className="dropdown-item" to="/agregar-tema">Agregar Tema</Link></li>
-                        <li><a className="dropdown-item" href="#">Agregar Subtema</a></li>
-                        <li><a className="dropdown-item" href="#">Agregar Topico</a></li>
+                        <li className="nav-item dropdown">
+                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Agregar Contenedor Maestro
+                        </a>
+                        <ul className="dropdown-menu">
+                            <li><Link className="dropdown-item" to="/agregar-tema">Agregar Tema</Link></li>
+                            <li><a className="dropdown-item" href="#">Agregar Subtema</a></li>
+                            <li><a className="dropdown-item" href="#">Agregar Topico</a></li>
+                        </ul>
+                        </li>
+
                     </ul>
-                    </li>
-
-                </ul>
-                <form className="d-flex" role="search">
-                    <input className="form-control me-2" type="search" placeholder="Buscar Pregunta" aria-label="Search"/>
-                    <button className="btn btn-outline-success" type="submit">Buscar</button>
-                </form>
+                    <form className="d-flex" role="search">
+                        <input className="form-control me-2" type="search" placeholder="Buscar Pregunta" aria-label="Search"/>
+                        <button className="btn btn-outline-success" type="submit">Buscar</button>
+                    </form>
+                    </div>
+                  </>
+                )}
+                <div className="d-flex align-items-center ms-auto">
+                  {autenticado ? (
+                    <>
+                      <span className="navbar-text me-3">Bienvenido, {getNombre()}</span>
+                      <button className="btn btn-outline-light" onClick={cerrarSesion}>
+                        Cerrar Sesión
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link className="nav-link text-white me-2" to="/login">Iniciar Sesión</Link>
+                      <Link className="nav-link text-white" to="/registro">Registrarse</Link>
+                    </>
+                  )}
                 </div>
             </div>
-        </nav>        
+        </nav>
     </div>
   )
 }

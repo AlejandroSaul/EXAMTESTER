@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { authFetch } from "../api";
 
 export default function ImportarMasivo() {
   const [archivo, setArchivo] = useState(null);
-  const baseURL = process.env.REACT_APP_API_URL;
 
   const subir = () => {
     const formData = new FormData();
     formData.append("file", archivo);
 
-    fetch(`${baseURL}/api/examen/importar-excel`, {
+    authFetch("/api/examen/importar-excel", {
       method: "POST",
       body: formData,
     })

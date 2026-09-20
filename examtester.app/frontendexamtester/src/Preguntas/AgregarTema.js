@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import { authFetch } from "../api";
 
 export default function AgregarTema() {
   const [nombreTema, setNombreTema] = useState('')
   const [mensaje, setMensaje] = useState(null)
   const [tipo, setTipo] = useState('')
-  const baseURL = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -14,9 +14,8 @@ export default function AgregarTema() {
       return
     }
     try {
-      const res = await fetch(`${baseURL}/api/examen/insertartema`, {
+      const res = await authFetch('/api/examen/insertartema', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombreTema: nombreTema.trim() })
       })
       const data = await res.json()

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { authFetch } from "../api";
 
 export default function Pregunta() {
 
@@ -14,13 +15,12 @@ export default function Pregunta() {
 
   const [topicos, setTopicos] = useState([])
   const [topicoSeleccionado, setTopicoSeleccionado] = useState("")
-  const baseURL = process.env.REACT_APP_API_URL;
 
   // =========================
   // Cargar Temas
   // =========================
   useEffect(() => {
-    fetch(`${baseURL}/api/examen/temas`)
+    authFetch("/api/examen/temas")
       .then(res => res.json())
       .then(data => {
         const temasArray = Object.entries(data).map(([id, nombre]) => ({
@@ -42,7 +42,7 @@ export default function Pregunta() {
       return
     }
 
-    fetch(`${baseURL}/api/examen/subtemas/${temaSeleccionado}`)
+    authFetch(`/api/examen/subtemas/${temaSeleccionado}`)
       .then(res => res.json())
       .then(data => {
         const subtemasArray = Array.isArray(data)
@@ -71,7 +71,7 @@ export default function Pregunta() {
       return
     }
 
-    fetch(`${baseURL}/api/examen/topico/${subtemaSeleccionado}`)
+    authFetch(`/api/examen/topico/${subtemaSeleccionado}`)
       .then(res => res.json())
       .then(data => {
         const topicosArray = Array.isArray(data)
@@ -99,7 +99,7 @@ export default function Pregunta() {
       return
     }
 
-    fetch(`${baseURL}/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`)
+    authFetch(`/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`)
       .then(res => {
         if (!res.ok) throw new Error("Error HTTP")
         return res.json()
@@ -121,7 +121,7 @@ export default function Pregunta() {
   const siguientePregunta = () => {
     if (!topicoSeleccionado) return
 
-    fetch(`${baseURL}/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`)
+    authFetch(`/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`)
       .then(res => res.json())
       .then(data => {
         setPregunta(data)
