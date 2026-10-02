@@ -28,7 +28,12 @@ export function authFetch(url, options = {}) {
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
-  if (options.body && !headers["Content-Type"]) {
+  // Con FormData el navegador debe fijar Content-Type: multipart/form-data;
+  // boundary=... Si lo forzamos a application/json se pierde el boundary y
+  // Spring no puede enlazar el MultipartFile.
+  const esFormData =
+    typeof FormData !== "undefined" && options.body instanceof FormData;
+  if (options.body && !esFormData && !headers["Content-Type"]) {
     headers["Content-Type"] = "application/json";
   }
   return fetch(`${baseURL}${url}`, { ...options, headers });

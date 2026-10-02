@@ -1,15 +1,21 @@
 package com.examtester.controller;
 
+import java.util.Date;
+
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +23,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +39,21 @@ public class ExamenControllerIntegrationTest {
 
     @Autowired
     private DataSource dataSource;
+
+    @Value("${JWT_SECRET}")
+    private String jwtSecret;
+
+    // /api/examen/* está protegido por JwtFilter, por lo que el test debe
+    // enviar un Bearer token válido firmado con el mismo JWT_SECRET.
+    private String tokenValido() {
+        return Jwts.builder()
+                .subject("test@examtester.com")
+                .claim("nombre", "Usuario Test")
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 3600_000L))
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .compact();
+    }
 
     // El DAO usa JDBC crudo (dataSource.getConnection() con autocommit), por lo que
     // @Transactional no haría rollback del INSERT. La limpieza debe ser explícita.
@@ -75,9 +97,18 @@ public class ExamenControllerIntegrationTest {
                     baos.toByteArray());
 
             // 4. Enviar la petición al endpoint de carga masiva
-            mockMvc.perform(multipart("/api/examen/importar-excel").file(file))
+            mockMvc.perform(multipart("/api/examen/importar-excel")
+                            .file(file)
+                            .header("Authorization", "Bearer " + tokenValido()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.mensaje", containsString("Se insertaron 1 registros")));
         }
+    }
+
+    @Test
+    public void testEndpointProtegido_SinToken_Retorna401() throws Exception {
+        mockMvc.perform(get("/api/examen/temas"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.mensaje", containsString("Token no proporcionado")));
     }
 }

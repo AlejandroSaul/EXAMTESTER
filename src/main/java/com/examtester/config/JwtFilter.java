@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtFilter implements Filter {
 
-    @Value("${JWT_SECRET:defaultSecret}")
+    @Value("${JWT_SECRET}")
     private String jwtSecret;
 
     @Override
@@ -31,6 +30,7 @@ public class JwtFilter implements Filter {
         HttpServletRequest httpReq = (HttpServletRequest) request;
         HttpServletResponse httpRes = (HttpServletResponse) response;
 
+        // Preflight CORS: no lleva Authorization, debe pasar sin validar.
         if ("OPTIONS".equalsIgnoreCase(httpReq.getMethod())) {
             chain.doFilter(request, response);
             return;
@@ -38,9 +38,7 @@ public class JwtFilter implements Filter {
 
         String header = httpReq.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            httpRes.setContentType("application/json");
-            httpRes.getWriter().write("{\"codigo\":1,\"mensaje\":\"Token no proporcionado\"}");
+            escribirError(httpRes, "Token no proporcionado");
             return;
         }
 
@@ -52,11 +50,20 @@ public class JwtFilter implements Filter {
                     .parseSignedClaims(token);
             httpReq.setAttribute("correoElectronico", claims.getPayload().getSubject());
             httpReq.setAttribute("nombre", claims.getPayload().get("nombre", String.class));
-            chain.doFilter(request, response);
         } catch (Exception e) {
-            httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            httpRes.setContentType("application/json");
-            httpRes.getWriter().write("{\"codigo\":1,\"mensaje\":\"Token invalido\"}");
+            System.out.println("Error validando JWT: " + e.getMessage());
+            escribirError(httpRes, "Token invalido");
+            return;
         }
+
+        // IMPORTANTE: fuera del try de validación del token, para que los errores
+        // del controller (p. ej. archivo Excel mal formado) no se reporten como 401.
+        chain.doFilter(request, response);
+    }
+
+    private void escribirError(HttpServletResponse response, String mensaje) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"codigo\":1,\"mensaje\":\"" + mensaje + "\"}");
     }
 }

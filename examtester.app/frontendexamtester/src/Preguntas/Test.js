@@ -1,11 +1,39 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { authFetch } from "../api";
+
+// Un <input type="text"> es un control de una sola linea: el navegador descarta
+// los \n al pintar el value, aunque el string los contenga. Para preguntas y
+// respuestas que traen codigo en varias lineas hay que usar <textarea>.
+// Este componente ademas ajusta la altura al contenido para evitar scrollbar.
+function AutoTextarea({ value, className = "", rows = 1, ...rest }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [value]);
+
+  return (
+    <textarea
+      ref={ref}
+      className={className}
+      value={value}
+      readOnly
+      rows={rows}
+      style={{ resize: "none", overflow: "hidden" }}
+      {...rest}
+    />
+  );
+}
 
 export default function Pregunta() {
 
   const [pregunta, setPregunta] = useState(null)
   const [seleccionadas, setSeleccionadas] = useState([])
   const [resultado, setResultado] = useState(null)
+  const [explicacionAbierta, setExplicacionAbierta] = useState(false)
 
   const [temas, setTemas] = useState([])
   const [temaSeleccionado, setTemaSeleccionado] = useState("")
@@ -108,6 +136,7 @@ export default function Pregunta() {
         setPregunta(data)
         setSeleccionadas([])
         setResultado(null)
+        setExplicacionAbierta(false)
       })
       .catch(err => {
         console.error("Error al cargar pregunta:", err)
@@ -127,6 +156,7 @@ export default function Pregunta() {
         setPregunta(data)
         setSeleccionadas([])
         setResultado(null)
+        setExplicacionAbierta(false)
       })
   }
 
@@ -265,11 +295,10 @@ export default function Pregunta() {
         <>
           <div className="mb-3">
             <label className="form-label fw-bold">Pregunta</label>
-            <input
-              type="text"
+            <AutoTextarea
               className="form-control mb-3"
               value={pregunta.pregunta}
-              readOnly
+              aria-label="Pregunta"
             />
 
             <label className="form-label fw-bold">Respuestas</label>
@@ -286,12 +315,40 @@ export default function Pregunta() {
                   checked={seleccionadas.includes(r.key)}
                   onChange={() => toggleRespuesta(r.key)}
                 />
-                <label className="form-check-label">
-                  {r.value}
-                </label>
+                <AutoTextarea
+                  className="form-check-label flex-grow-1"
+                  value={r.value}
+                  aria-label={`Respuesta ${r.key}`}
+                />
               </div>
             ))}
           </div>
+
+          {/* EXPLICACION */}
+          {pregunta.explicacion &&
+            pregunta.explicacion !== "-" &&
+            !explicacionAbierta && (
+              <div className="mb-3">
+                <button
+                  type="button"
+                  className="btn btn-link p-0 text-decoration-none"
+                  onClick={() => setExplicacionAbierta(true)}
+                >
+                  Ver explicaci&oacute;n
+                </button>
+              </div>
+            )}
+
+          {explicacionAbierta && pregunta.explicacion && pregunta.explicacion !== "-" && (
+            <div className="mb-3">
+              <label className="form-label fw-bold">Explicaci&oacute;n</label>
+              <AutoTextarea
+                className="form-control"
+                value={pregunta.explicacion}
+                aria-label="Explicacion"
+              />
+            </div>
+          )}
 
           {/* Resultado */}
           <input
