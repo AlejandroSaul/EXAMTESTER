@@ -181,10 +181,8 @@ export default function Pregunta() {
       return
     }
 
-    const correctas = pregunta.respuestaCorrecta
-      .split(",")
-      .map(r => r.trim())
 
+    const correctas = [...pregunta.respuestaCorrecta];
     const seleccionadasOrdenadas = [...seleccionadas].sort()
     const correctasOrdenadas = [...correctas].sort()
 
