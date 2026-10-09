@@ -47,7 +47,7 @@ public class BiImpl implements Bi{
 		ArrayList<Integer> arregloPreguntas = examenDAO.getPreguntasXSubtemaTopico(idSubtemaTopico);
 		Integer longitud  = arregloPreguntas.size();
 		Random random = new Random();
-		Integer posicionAleatoria = random.nextInt(0, longitud-1) ;
+		Integer posicionAleatoria = random.nextInt(0, longitud) ;
 		Long idPregunta =  Long.parseLong(arregloPreguntas.get(posicionAleatoria).toString());
 		return getPregunta(idPregunta);
 	}
