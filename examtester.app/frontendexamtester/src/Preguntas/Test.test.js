@@ -54,13 +54,14 @@ describe('Integración UI con API REST - Componente Test.js', () => {
   });
 
   // Selecciona Tema -> Subtema -> Tópico y espera a que se pinte la pregunta.
-  async function seleccionarCadenaCompleta() {
+  // valorTopico permite elegir la opción especial "TODOS".
+  async function seleccionarCadenaCompleta(valorTopico = '1') {
     await waitFor(() => expect(screen.getByRole('option', { name: 'Java' })).toBeInTheDocument());
     await userEvent.selectOptions(screen.getAllByRole('combobox')[0], '1');
     await waitFor(() => expect(screen.getByRole('option', { name: 'Fundamentos' })).toBeInTheDocument());
     await userEvent.selectOptions(screen.getAllByRole('combobox')[1], '1');
     await waitFor(() => expect(screen.getByRole('option', { name: 'Variables' })).toBeInTheDocument());
-    await userEvent.selectOptions(screen.getAllByRole('combobox')[2], '1');
+    await userEvent.selectOptions(screen.getAllByRole('combobox')[2], valorTopico);
   }
 
   it('debe procesar la respuesta asíncrona y renderizar las opciones dinámicamente', async () => {
@@ -141,6 +142,39 @@ describe('Integración UI con API REST - Componente Test.js', () => {
       const textareaExplicacion = screen.getByRole('textbox', { name: 'Explicacion' });
       expect(textareaExplicacion.value).toBe(respuestaPreguntaMultilinea.explicacion);
       expect(textareaExplicacion.value).toContain('\n');
+    });
+  });
+
+  it('debe repasar todos los tópicos del subtema al elegir la opción "TODOS"', async () => {
+    render(
+      <BrowserRouter>
+        <TestComponent />
+      </BrowserRouter>
+    );
+
+    // Elegir "Todos los tópicos" debe consultar el endpoint por subtema,
+    // no el endpoint filtrado por tópico.
+    await seleccionarCadenaCompleta('TODOS');
+
+    await waitFor(() => {
+      const urlsLlamadas = global.fetch.mock.calls.map(c => String(c[0]));
+      expect(
+        urlsLlamadas.some(u => u.includes('/api/examen/pregunta/subtema/1'))
+      ).toBe(true);
+      expect(
+        urlsLlamadas.some(u => u.includes('/api/examen/pregunta/subtemaTopico/'))
+      ).toBe(false);
+    });
+
+    // "Nueva pregunta" vuelve a pedir por subtema
+    const botonNueva = await screen.findByRole('button', { name: /nueva pregunta/i });
+    await userEvent.click(botonNueva);
+    await waitFor(() => {
+      const urlsLlamadas = global.fetch.mock.calls.map(c => String(c[0]));
+      const llamadasSubtema = urlsLlamadas.filter(u =>
+        u.includes('/api/examen/pregunta/subtema/1')
+      );
+      expect(llamadasSubtema.length).toBeGreaterThanOrEqual(2);
     });
   });
 });

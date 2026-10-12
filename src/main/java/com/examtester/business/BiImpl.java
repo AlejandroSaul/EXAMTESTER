@@ -8,6 +8,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +20,8 @@ import com.examtester.entidad.PreguntaInfoVo;
 
 @Service
 public class BiImpl implements Bi{
+	private static final Logger logger = LoggerFactory.getLogger(BiImpl.class);
+
 	private final ExamenDAO examenDAO;
 
 	public BiImpl(ExamenDAO examenDAO) {
@@ -47,8 +51,20 @@ public class BiImpl implements Bi{
 		ArrayList<Integer> arregloPreguntas = examenDAO.getPreguntasXSubtemaTopico(idSubtemaTopico);
 		Integer longitud  = arregloPreguntas.size();
 		Random random = new Random();
-		Integer posicionAleatoria = random.nextInt(0, longitud) ;
+		Integer posicionAleatoria = random.nextInt(0, longitud-1) ;
 		Long idPregunta =  Long.parseLong(arregloPreguntas.get(posicionAleatoria).toString());
+		return getPregunta(idPregunta);
+	}
+
+	@Override
+	public PreguntaInfoVo getPreguntaXSubtema(Long idSubtema) {
+		ArrayList<Integer> arregloPreguntas = examenDAO.getPreguntasXSubtema(idSubtema);
+		if (arregloPreguntas.isEmpty()) {
+			return new PreguntaInfoVo();
+		}
+		Random random = new Random();
+		Integer posicionAleatoria = random.nextInt(arregloPreguntas.size());
+		Long idPregunta = Long.parseLong(arregloPreguntas.get(posicionAleatoria).toString());
 		return getPregunta(idPregunta);
 	}
 
@@ -79,14 +95,21 @@ public class BiImpl implements Bi{
 	public GenericResponse procesarExcelPreguntas(MultipartFile file) {
 		GenericResponse respuesta = new GenericResponse();
 		int filasInsertadas = 0;
+		int filasOmitidas = 0;
+		int errores = 0;
 		
 		try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
 			Sheet sheet = workbook.getSheetAt(0);
+			logger.info("Iniciando carga masiva. Hoja: '{}', total de filas: {}", sheet.getSheetName(), sheet.getPhysicalNumberOfRows());
 			
 			for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 				Row row = sheet.getRow(i);
 				
-				if (row == null || BiProcesamientoExcel.isRowEmpty(row)) continue;
+				if (row == null || BiProcesamientoExcel.isRowEmpty(row)) {
+					logger.warn("Fila {} vacía, se omite", i + 1);
+					filasOmitidas++;
+					continue;
+				}
 				
 				try {
 					Pregunta pregunta = new Pregunta();
@@ -94,6 +117,9 @@ public class BiImpl implements Bi{
 					pregunta.setIdSubtemaTopico((int) BiProcesamientoExcel.getNumericValue(row.getCell(1)));
 					pregunta.setIdOrigen((int) BiProcesamientoExcel.getNumericValue(row.getCell(2)));
 					pregunta.setPregunta(BiProcesamientoExcel.getStringValue(row.getCell(3)));
+					if (pregunta.getPregunta() != null && pregunta.getPregunta().length() > 500) {
+						logger.warn("Fila {}: la columna PREGUNTA tiene {} caracteres (supera 500) y MySQL la truncará silenciosamente", i + 1, pregunta.getPregunta().length());
+					}
 					pregunta.setRutaArchivo(BiProcesamientoExcel.getStringValue(row.getCell(4)));
 					pregunta.setRespuestaA(BiProcesamientoExcel.getStringValue(row.getCell(5)));
 					pregunta.setRespuestaB(BiProcesamientoExcel.getStringValue(row.getCell(6)));
@@ -112,13 +138,15 @@ public class BiImpl implements Bi{
 					insertarPregunta(pregunta);
 					filasInsertadas++;
 				} catch (Exception e) {
-					System.out.println("Error en la fila " + i + ": " + e.getMessage());
+					logger.error("Error procesando la fila {}: {}", i + 1, e.getMessage(), e);
+					errores++;
 				}
 			}
+			logger.info("Carga masiva finalizada. Insertadas: {}, Errores: {}, Omitidas: {}", filasInsertadas, errores, filasOmitidas);
 			respuesta.setCodigo(1);
 			respuesta.setMensaje("Proceso terminado. Se insertaron " + filasInsertadas + " registros con éxito.");
 		} catch (Exception e) {
-			System.out.println("Error general al procesar Excel: "+ e);
+			logger.error("Error general al procesar Excel", e);
 			respuesta.setCodigo(0);
 			respuesta.setMensaje("Error al procesar el archivo: " + e.getMessage());
 		}

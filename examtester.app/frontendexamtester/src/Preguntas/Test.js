@@ -121,13 +121,20 @@ export default function Pregunta() {
   // =========================
   // Cargar Pregunta
   // =========================
+  // Si el tópico es "TODOS" se pide una pregunta aleatoria de cualquier tópico
+  // dentro del subtema seleccionado (repaso general). Si no, se filtra por tópico.
+  const urlPregunta =
+    topicoSeleccionado === "TODOS"
+      ? `/api/examen/pregunta/subtema/${subtemaSeleccionado}`
+      : `/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`
+
   useEffect(() => {
     if (!topicoSeleccionado) {
       setPregunta(null)
       return
     }
 
-    authFetch(`/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`)
+    authFetch(urlPregunta)
       .then(res => {
         if (!res.ok) throw new Error("Error HTTP")
         return res.json()
@@ -142,6 +149,7 @@ export default function Pregunta() {
         console.error("Error al cargar pregunta:", err)
         setPregunta(null)
       })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topicoSeleccionado])
 
   // =========================
@@ -150,7 +158,7 @@ export default function Pregunta() {
   const siguientePregunta = () => {
     if (!topicoSeleccionado) return
 
-    authFetch(`/api/examen/pregunta/subtemaTopico/${topicoSeleccionado}`)
+    authFetch(urlPregunta)
       .then(res => res.json())
       .then(data => {
         setPregunta(data)
@@ -274,6 +282,7 @@ export default function Pregunta() {
             onChange={(e) => setTopicoSeleccionado(e.target.value)}
           >
             <option value="">-- Selecciona un tópico --</option>
+            <option value="TODOS">Todos los tópicos</option>
             {topicos.map(t => (
               <option key={t.idTopico} value={t.idTopico}>
                 {t.nombre}

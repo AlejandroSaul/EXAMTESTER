@@ -3,8 +3,22 @@ package com.examtester.business;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface BiProcesamientoExcel {
+/**
+ * Clase de utilidades para procesar celdas de un archivo Excel.
+ * No debe instanciarse: todos los métodos son estáticos.
+ *
+ * @author Alejandro Saúl Baños
+ */
+public final class BiProcesamientoExcel {
+
+	private static final Logger logger = LoggerFactory.getLogger(BiProcesamientoExcel.class);
+
+	private BiProcesamientoExcel() {
+		// Constructor privado para evitar instanciación
+	}
 	
 	/**
 	 * Método que asegura la conversión de tipo de dato a String
@@ -13,14 +27,19 @@ public interface BiProcesamientoExcel {
 	 * @author Alejandro Saúl Baños
 	 * */
 	public static String getStringValue(Cell cell) {
-		if (cell == null || cell.getCellType() == CellType.BLANK) {
+		try {
+			if (cell == null || cell.getCellType() == CellType.BLANK) {
+				return "";
+			}
+			if (cell.getCellType() == CellType.NUMERIC) {
+				// En caso de que un número se lea como texto (ej. ID de materia)
+				return String.valueOf((int) cell.getNumericCellValue());
+			}
+			return cell.getStringCellValue().trim();
+		} catch (Exception e) {
+			logger.error("Error leyendo celda como texto...", e);
 			return "";
 		}
-		if (cell.getCellType() == CellType.NUMERIC) {
-			// En caso de que un número se lea como texto (ej. ID de materia)
-			return String.valueOf((int) cell.getNumericCellValue());
-		}
-		return cell.getStringCellValue().trim();
 	}
 	
 	/**
@@ -31,15 +50,21 @@ public interface BiProcesamientoExcel {
 	 * */
 	public static double getNumericValue(Cell cell) {
 		if (cell == null || cell.getCellType() == CellType.BLANK) return 0;
-		if (cell.getCellType() == CellType.STRING) {
-			try { 
-				return Double.parseDouble(cell.getStringCellValue()); 
+		try {
+			if (cell.getCellType() == CellType.STRING) {
+				try { 
+					return Double.parseDouble(cell.getStringCellValue()); 
 				} 
-			catch (NumberFormatException e) {
-				return 0; 
+				catch (NumberFormatException e) {
+					logger.error("Error al parsear celda numérica: {}", e.getMessage(), e);
+					return 0; 
 				}
+			}
+			return cell.getNumericCellValue();
+		} catch (Exception e) {
+			logger.error("Error leyendo celda como numérico...", e);
+			return 0;
 		}
-		return cell.getNumericCellValue();
 	}
 	
 	/**

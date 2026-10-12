@@ -157,6 +157,38 @@ public class ExamenDAOImpl implements ExamenDAO {
 		return arregloPreguntas;
 	}
 	
+	@Override
+	public ArrayList<Integer> getPreguntasXSubtema(Long idSubtema) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Connection con = null;
+		String sql = QuerysTester.QUERY_GET_PREGUNTAS_SUBTEMA;
+		ArrayList<Integer> arregloPreguntas = new ArrayList<Integer>();
+		try {
+			con = dataSource.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setLong(1, idSubtema);
+			rs = ps.executeQuery();
+			if(ps != null) {
+				while(rs.next()) {
+					Integer idPregunta = rs.getInt("ID_PREGUNTA");
+					arregloPreguntas.add(idPregunta);
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Error al consultar las preguntas del subtema: "+e);
+		}finally {
+			try {
+				rs.close();
+				ps.close();
+				con.close();
+			} catch (Exception e) {
+				System.out.println("Error al cerrar las conexiones"+e);
+			}
+		}
+		return arregloPreguntas;
+	}
+	
 	@SuppressWarnings("unused")
 	@Override
 	public PreguntaInfoVo getPregunta(Long id) {

@@ -41,6 +41,15 @@ public interface Bi {
 	public PreguntaInfoVo getPreguntaXSubtemaTopico(Long idSubtemaTopico);
 	
     /**
+     * Método que obtiene una pregunta aleatoria de BD perteneciente a cualquier
+     * tópico dentro de un subtema
+     * @param idSubtema id del subtema del cual se desea obtener la pregunta
+     * @return PreguntaInfoVo Objeto de valor con la información de la pregunta
+     * @author Alejandro Saúl Baños
+     * */
+	public PreguntaInfoVo getPreguntaXSubtema(Long idSubtema);
+	
+    /**
      * Método que inserta en BD todas las preguntas registradas en el archivo excel
      * @param file objeto MultipartFile el cual debe ser llenado previamente antes de la carga
      * @return GenericResponse Objeto con la respuesta generica para obtener información del procesamientos

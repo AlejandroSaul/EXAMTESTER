@@ -25,13 +25,13 @@ import com.examtester.entidad.Pregunta;
 @RequestMapping("/api/examen")
 public class ExamenController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ExamenController.class);
+
     private final Bi bi;
 
     public ExamenController(Bi bi) {
         this.bi = bi;
     }
-    
-    public static final Logger log = LoggerFactory.getLogger(ExamenController.class);
     
     /**
      * Método que obtiene todos los temas existentes en BD
@@ -81,6 +81,19 @@ public class ExamenController {
     }
     
     /**
+     * Método que obtiene una pregunta aleatoria de BD perteneciente a cualquier
+     * tópico dentro de un subtema
+     * URL = http://localhost:8081/api/examen/pregunta/subtema/{idSubtema}
+     * @param idSubtema del subtema del cual se desea obtener la información
+     * @return PreguntaInfoVo Objeto de valor con la información de la pregunta
+     * @author Alejandro Saúl Baños
+     * */
+    @GetMapping("/pregunta/subtema/{idSubtema}")
+    public PreguntaInfoVo getPreguntaXSubtema(@PathVariable("idSubtema")Long idSubtema) {
+        return bi.getPreguntaXSubtema(idSubtema);
+    }
+    
+    /**
      * Método que inserta en BD todas las preguntas registradas en el archivo excel
      * URL = http://localhost:8081/api/examen/importar-excel
      * @param file objeto MultipartFile el cual debe ser llenado previamente antes de la carga
@@ -89,7 +102,25 @@ public class ExamenController {
      * */
     @PostMapping("/importar-excel")
     public GenericResponse importarExcel(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            logger.warn("Se recibió un archivo vacío o no proporcionado");
+            GenericResponse respuesta = new GenericResponse();
+            respuesta.setCodigo(1);
+            respuesta.setMensaje("Archivo vacío o no proporcionado");
+            return respuesta;
+        }
+
+        logger.info("Archivo recibido: {} ({} bytes)", file.getOriginalFilename(), file.getSize());
+
+        try {
             return bi.procesarExcelPreguntas(file);
+        } catch (Exception e) {
+            logger.error("Error en carga masiva de Excel (controlador)", e);
+            GenericResponse respuesta = new GenericResponse();
+            respuesta.setCodigo(1);
+            respuesta.setMensaje("Error al procesar el archivo: " + e.getMessage());
+            return respuesta;
+        }
     }
 
     @PostMapping("/insertartema")

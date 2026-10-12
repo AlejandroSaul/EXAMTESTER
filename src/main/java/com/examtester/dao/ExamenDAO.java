@@ -43,6 +43,15 @@ public interface ExamenDAO {
 	public ArrayList<Integer> getPreguntasXSubtemaTopico(Long idSubtemaTopico);
 	
     /**
+     * Método que obtiene una lista de ids de todas las preguntas pertenecientes a
+     * cualquier tópico dentro de un subtema
+     * @param idSubtema id del subtema del cual se desean obtener las preguntas
+     * @return ArrayList<Integer> Lista de ids de preguntas pertenecientes al subtema
+     * @author Alejandro Saúl Baños
+     * */
+	public ArrayList<Integer> getPreguntasXSubtema(Long idSubtema);
+	
+    /**
      * Método que obtiene la pregunta solicitada mediante el id enviado 
      * @param id de la pregunta deseada
      * @return PreguntaInfoVo Objeto de valor con la información de la pregunta

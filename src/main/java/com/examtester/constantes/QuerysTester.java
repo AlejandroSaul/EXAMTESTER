@@ -15,6 +15,9 @@ public class QuerysTester {
 			+ "WHERE st.ID_SUBTEMA = ? ";
 	public static final String QUERY_GET_PREGUNTAS_SUBTEMATOPICO = "SELECT ID_PREGUNTA FROM PREGUNTAS "
 			+ "WHERE ID_SUBTEMA_TOPICO = ? ";
+	public static final String QUERY_GET_PREGUNTAS_SUBTEMA = "SELECT P.ID_PREGUNTA FROM PREGUNTAS P "
+			+ "JOIN subtema_topico ST ON ST.ID_SUBTEMA_TOPICO = P.ID_SUBTEMA_TOPICO "
+			+ "WHERE ST.ID_SUBTEMA = ? ";
 	public static final String QUERY_GET_ALL_PREGUNTAS = "SELECT "
 		    + "P.ID_PREGUNTA, "
 		    + "P.PREGUNTA, "
